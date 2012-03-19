@@ -14,4 +14,10 @@
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 
+
+//测试
+- (void)actionAPP;
+//启动检查配置更新
+- (void)checkUpConfig;
+
 @end

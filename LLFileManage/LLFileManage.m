@@ -23,6 +23,9 @@
 	[super dealloc];
 }
 
+
+#pragma mark- 沙盒文件管理
+
 /*! 
  * 创建路径
  * @param fileName 文件名
@@ -125,6 +128,23 @@
     }
 }
 
+
+
+#pragma mark- 程序包内资源
+
+/*!
+ * 加载资源包内文件
+ * @param fileName 文件名
+ * @param type  文件类型，扩展名
+ */
+
++ (NSData *)ReadLocalFile:(NSString *)fileName FileType:(NSString *)type
+{
+    
+    NSString *localFile = [[NSBundle mainBundle] pathForResource:fileName ofType:type];
+    NSData *data = [NSData dataWithContentsOfFile:localFile];
+    return data;
+}
 
 
 @end

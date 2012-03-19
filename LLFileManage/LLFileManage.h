@@ -43,5 +43,13 @@
  */
 + (void)DeleteFile:(NSString *)fileName;
 
+/*!
+ * 加载资源包内文件
+ * @param fileName 文件名
+ * @param type  文件类型，扩展名
+ */
+
++ (NSData *)ReadLocalFile:(NSString *)fileName FileType:(NSString *)type;
+
 
 @end

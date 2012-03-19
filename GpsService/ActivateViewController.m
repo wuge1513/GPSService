@@ -21,9 +21,12 @@
 
 @implementation ActivateViewController
 
-@synthesize lblPhoneNum, lblCompanyNum, lblPersonNum;
-@synthesize tfPhoneNum, tfCompanyNum, tfPersonNum;  
+//@synthesize lblCompanyNum, tfCompanyNum;
+@synthesize lblPhoneNum, lblPersonNum;
+@synthesize tfPhoneNum, tfPersonNum;  
 @synthesize strHost;
+
+@synthesize webData;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -49,11 +52,11 @@
 {
     [strHost release];
     [lblPhoneNum release];
-    [lblCompanyNum release];
+    //[lblCompanyNum release];
     [lblPersonNum release];
     
     [tfPhoneNum release];
-    [tfCompanyNum release];
+    //[tfCompanyNum release];
     [tfPersonNum release];
     [super dealloc];
 }
@@ -74,7 +77,7 @@
     self.view.backgroundColor = [UIColor grayColor];
     
     //手机号标签
-    UILabel *_lblPhoneNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 40.0, 100.0, 30.0)];
+    UILabel *_lblPhoneNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 100.0, 30.0)];
     self.lblPhoneNum = _lblPhoneNum;
     self.lblPhoneNum.text = @"确认手机号";
     self.lblPhoneNum.backgroundColor = [UIColor clearColor];
@@ -82,15 +85,15 @@
     [_lblPhoneNum release];
     
     //公司确认码
-    UILabel *_lblCompanyNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 100.0, 100.0, 30.0)];
-    self.lblCompanyNum = _lblCompanyNum;
-    self.lblCompanyNum.text = @"公司确认码";
-    self.lblCompanyNum.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.lblCompanyNum];
-    [_lblCompanyNum release];
+//    UILabel *_lblCompanyNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 100.0, 100.0, 30.0)];
+//    self.lblCompanyNum = _lblCompanyNum;
+//    self.lblCompanyNum.text = @"公司确认码";
+//    self.lblCompanyNum.backgroundColor = [UIColor clearColor];
+//    [self.view addSubview:self.lblCompanyNum];
+//    [_lblCompanyNum release];
     
     //个人确认码
-    UILabel *_lblPersonNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 160.0, 100.0, 30.0)];
+    UILabel *_lblPersonNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 120.0, 100.0, 30.0)];
     self.lblPersonNum = _lblPersonNum;
     self.lblPersonNum.text = @"个人确认码";
     self.lblPersonNum.backgroundColor = [UIColor clearColor];
@@ -98,7 +101,7 @@
     [_lblPersonNum release];
     
     //确认手机号输入框
-    UITextField *_tfPhoneNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 40.0, 200.0, 30.0)];
+    UITextField *_tfPhoneNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 60.0, 200.0, 30.0)];
     self.tfPhoneNum = _tfPhoneNum;
     self.tfPhoneNum.borderStyle = UITextBorderStyleRoundedRect;
     self.tfPhoneNum.delegate = self;
@@ -107,17 +110,17 @@
     [_tfPhoneNum release];
     
     //公司确认码输入框
-    UITextField *_tfCompanyNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 100.0, 200.0, 30.0)];
-    self.tfCompanyNum = _tfCompanyNum;
-    self.tfCompanyNum.borderStyle = UITextBorderStyleRoundedRect;
-    self.tfCompanyNum.delegate = self;
-    self.tfCompanyNum.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    //self.tfPhoneNum.backgroundColor = [UIColor grayColor];
-    [self.view addSubview:self.tfCompanyNum];
-    [_tfCompanyNum release];
+//    UITextField *_tfCompanyNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 100.0, 200.0, 30.0)];
+//    self.tfCompanyNum = _tfCompanyNum;
+//    self.tfCompanyNum.borderStyle = UITextBorderStyleRoundedRect;
+//    self.tfCompanyNum.delegate = self;
+//    self.tfCompanyNum.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+//    //self.tfPhoneNum.backgroundColor = [UIColor grayColor];
+//    [self.view addSubview:self.tfCompanyNum];
+//    [_tfCompanyNum release];
     
     //个人确认码输入框
-    UITextField *_tfPersonNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 160.0, 200.0, 30.0)];
+    UITextField *_tfPersonNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 120.0, 200.0, 30.0)];
     self.tfPersonNum = _tfPersonNum;
     self.tfPersonNum.borderStyle = UITextBorderStyleRoundedRect;
     self.tfPersonNum.delegate = self;
@@ -130,7 +133,7 @@
     
     //13012345673	d0a87429
     self.tfPhoneNum.text = @"18801167317";//13012345675
-    self.tfCompanyNum.text = @"550b04d4"; //不变550b04d4
+    //self.tfCompanyNum.text = @"550b04d4"; //不变
     self.tfPersonNum.text = @"8ee1c03a";//84b43398 19070981
     
 	//判断配置文件是否已经下载
@@ -209,7 +212,7 @@
 //收回虚拟键盘
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 	[self.tfPhoneNum resignFirstResponder];
-	[self.tfCompanyNum resignFirstResponder];
+	//[self.tfCompanyNum resignFirstResponder];
 	[self.tfPersonNum resignFirstResponder];    
 	return YES;
 }
@@ -252,14 +255,11 @@
     //文本输入框判断
     NSString *alertStr = @"";
     if ([self.tfPhoneNum.text isEqualToString:@""] || self.tfPhoneNum.text == nil ||
-        [self.tfCompanyNum.text isEqualToString:@""] || self.tfCompanyNum.text == nil ||
         [self.tfPersonNum.text isEqualToString:@""] || self.tfPersonNum.text == nil) {
         
         
         if ([self.tfPhoneNum.text isEqualToString:@""] || self.tfPhoneNum.text == nil) {
             alertStr = @"手机号码不能为空！";
-        }else if ([self.tfCompanyNum.text isEqualToString:@""] || self.tfCompanyNum.text == nil) {
-            alertStr = @"公司确认码不能为空！";
         }else if ([self.tfPersonNum.text isEqualToString:@""] || self.tfPersonNum.text == nil) {
             alertStr = @"个人确认码不能为空！";
         }
@@ -277,7 +277,7 @@
     }
     
     NSString *no = self.tfPhoneNum.text;   //手机号码
-    NSString *rx = self.tfCompanyNum.text; //公司确认码 （短信通知，10个字符）
+    NSString *rx = COMPANY_NUM;//self.tfCompanyNum.text; //公司确认码 （短信通知，10个字符）
     NSString *ry = self.tfPersonNum.text;  //个人确认码  (短信通知，10个字符）
     NSString *rt = [UtilityClass getSystemTime:@"yyyy-MM-dd HH:mm:ss"];     //手机时间 （安全校验用）
     
@@ -289,7 +289,11 @@
     
     //手机号 数据加密
     NSString *_no = [PBEWithMD5AndDES encrypt:no password:nil];
+    NSString *_rx = [PBEWithMD5AndDES encrypt:rx password:nil];
+    NSString *_ry = [PBEWithMD5AndDES encrypt:ry password:nil];
     NSLog(@"加密后：_no = %@", _no);
+    NSLog(@"加密后：_rx = %@", _rx);
+    NSLog(@"加密后：_ry = %@", _ry);
     NSLog(@"------------------------");
     
     // 获取0-9之间4个不重复的随机数的数组  对象
@@ -318,12 +322,8 @@
     NSLog(@"-----------------------");
     
 
-    NSString *crc = [UtilityClass getVertifyCode:_no encryptLongitude:rx encryptLatitude:ry systemTime:rt tranArray:transArr];
+    NSString *crc = [UtilityClass getVertifyCode:_no encryptLongitude:_rx encryptLatitude:_ry systemTime:rt tranArray:transArr];
     NSLog(@"随机序列生成校验码crc = %@", crc);
-    
-
-    //http://konka.mymyty.com/GPSBack.do?no=18238186018&rx=aaa&ry=bbb&rt=2012-02-13 12:00:30.098&idc=3xxaaddd
-    //time+.+三个随机数 idc = 一个随机数+crc
     
 
     // 手机发送的数据相当于以下
@@ -339,36 +339,28 @@
     NSURL *url = [NSURL URLWithString:@"http://konka.mymyty.com/GPSBack.do"];
     NSLog(@"url = %@", url);
     
-
-
-    ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
-    request.delegate = self;
-
-   
     NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithCapacity:5];
     [postData setValue:_no forKey:@"no"];
-    [postData setValue:rx forKey:@"rx"];
-    [postData setValue:ry forKey:@"ry"];
+    [postData setValue:_rx forKey:@"rx"];
+    [postData setValue:_ry forKey:@"ry"];
     [postData setValue:_rt forKey:@"rt"];
     [postData setValue:_idc forKey:@"idc"];
     NSLog(@"===postData = %@", postData);
 
-    NSString *jsonString = [postData JSONRepresentation];
-    NSLog(@"Send data:%@",jsonString);
-    
-    NSData *jsonData = [UtilityClass UTF8StringToData:jsonString];
-    NSLog(@"jsonData = %@", jsonData);
-    
-    
-     //[request setPostBody:jsonData];
-    
-    [request appendPostData:jsonData];
-    //[request buildPostBody];
+    ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
     [request setRequestMethod:@"POST"];
-    [request setTimeOutSeconds:20];
-    [request startAsynchronous]; //异步执行
+    request.delegate = self;
 
+//    NSString *jsonString = [postData JSONRepresentation];
+//    NSLog(@"Send data:%@",jsonString);
+//    NSData *jsonData = [UtilityClass UTF8StringToData:jsonString];
+//    NSLog(@"jsonData = %@", jsonData);
     
+    [request setPostValue:postData forKey:@"http://konka.mymyty.com/GPSBack.do"];
+    [request setTimeOutSeconds:1200];
+    [request startAsynchronous]; //异步执行
+    [request release];
+        
      
 #ifdef LL_DEBUG
     //解密过程 测试加密算法
@@ -376,12 +368,16 @@
     NSString *t_idc = [NSString stringWithFormat:@"%d%@", arr[3], crc];
     
     // 1.核对校验码
-    if ([UtilityClass checkVerifyCode:_no encryptLongitude:rx encryptLatitude:ry systemTime:t_z idcStr:t_idc]) {
+    if ([UtilityClass checkVerifyCode:_no encryptLongitude:_rx encryptLatitude:_ry systemTime:t_z idcStr:t_idc]) {
         // 2.解密数据
         NSLog(@"通过校验！");
         
         NSString *str1 = [PBEWithMD5AndDES decrypt:_no password:nil];
+        NSString *str2 = [PBEWithMD5AndDES decrypt:_rx password:nil];
+        NSString *str3 = [PBEWithMD5AndDES decrypt:_ry password:nil];
         NSLog(@"===str1 = %@", str1);
+        NSLog(@"===str2 = %@", str2);
+        NSLog(@"===str3 = %@", str3);
 
     } else {
         // 违法数据拒绝处理
@@ -393,8 +389,8 @@
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
     NSLog(@"Response %d ==> %@, =>%@", request.responseStatusCode, [request responseStatusMessage], [request responseString]);
-//    NSLog(@"responseHeaders=== %@", [request responseHeaders]);
-//    NSLog(@"responseCookies=== %@", [request responseCookies]);
+    
+
     NSLog(@"responeseData ==== %@", [request responseData]);
     NSLog(@"xxx = %@", request);
     
@@ -406,6 +402,9 @@
 	NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(NSUTF8StringEncoding);//kCFStringEncodingGB_18030_2000
     NSString *retStr = [[[NSString alloc] initWithData:response encoding:enc] autorelease];
     NSLog(@"retstr = %@", retStr);
+    
+    NSString *jsonString = [[request responseData] JSONRepresentation];
+    NSLog(@"Json data:%@",jsonString);
 }
 
 - (void)request:(ASIHTTPRequest *)request didReceiveResponseHeaders:(NSDictionary *)responseHeaders
@@ -415,7 +414,7 @@
 
 - (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
 {
-    NSLog(@"data123 = %@", data);
+    //NSLog(@"data123 = %@", data);
     NSLog(@"456= %@", [UtilityClass DataToUTF8String:data]);
 }
 
@@ -449,7 +448,64 @@
     //	[tooles removeHUD];
     //	[tooles MsgBox:@"连接超时，等会试试"];
     NSLog(@"失败。。。。");
+    
+    
 }
+
+-(void)performRequest{
+    
+//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://konka.mymyty.com/GPSBack.do"]];
+//    
+//    NSString *msgLength = [NSString stringWithFormat:@"%d", [jsonMessage length]];
+//    [request addValue: @"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+//    //[request addValue: jsonAction forHTTPHeaderField:@"JSONAction"];
+//    [request addValue: msgLength forHTTPHeaderField:@"Content-Length"];
+//    [request setHTTPMethod:@"POST"];
+//    [request setHTTPBody: [jsonMessage dataUsingEncoding:NSUTF8StringEncoding]];
+//    NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+//    if( theConnection )
+//    {
+//        webData = [[NSMutableData data] retain];
+//    }
+//    else
+//    {
+//        NSLog(@"theConnection is NULL");
+//    }
+//    [pool release];
+}
+
+-(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
+    [webData setLength: 0];
+    //self.resultArray = [[NSMutableArray alloc] init];
+}
+-(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+    NSLog(@"123===data = %@", data);
+    [webData appendData:data];
+}
+-(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
+    NSLog(@"ERROR with theConenction");
+    //NSDictionary *errorDic = [NSDictionary dictionaryWithObject:error forKey:@"error"];
+    //[self.resultArray addObject:errorDic];
+    [connection release];
+    [webData setLength:0];
+}
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection{
+    NSLog(@"DONE. Received Bytes: %d", [webData length]);
+    NSString *theXML = [[NSString alloc] initWithBytes: [webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", theXML);
+    [theXML release];
+    if([webData length] > 0){
+        
+        NSLog(@"ok!!!!!!!!!!");
+//        parser = [[NSXMLParser alloc] initWithData:webData];
+//        [parser setDelegate:self];
+//        [parser parse]; 
+    }
+}
+
+
+
 
 
 

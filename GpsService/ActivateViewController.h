@@ -11,12 +11,14 @@
 
 @property (strong, nonatomic) NSString *strHost;
 @property (strong, nonatomic) UILabel *lblPhoneNum;
-@property (strong, nonatomic) UILabel *lblCompanyNum;
+//@property (strong, nonatomic) UILabel *lblCompanyNum;
 @property (strong, nonatomic) UILabel *lblPersonNum;
 
 @property (strong, nonatomic) UITextField *tfPhoneNum;
-@property (strong, nonatomic) UITextField *tfCompanyNum;
+//@property (strong, nonatomic) UITextField *tfCompanyNum;
 @property (strong, nonatomic) UITextField *tfPersonNum;
+
+@property (strong, nonatomic) NSMutableData *webData;
 
 - (void)getHostStr:(NSData *)data;
 - (void)actionBack;

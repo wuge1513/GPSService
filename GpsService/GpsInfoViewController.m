@@ -178,15 +178,7 @@
      *
      */
     
-//    NSURL *url = [NSURL URLWithString:postStr];	
-//    
-//    //NSLog(@"====url = %@", url);
-//    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];	
-//    [request setDelegate:self];
-//    request.timeOutSeconds=30;
-//    [request setDidFinishSelector:@selector(Getdata:)];
-//    [request setDidFailSelector:@selector(GetErr:)];
-//    [request startAsynchronous];
+
     
     NSString *t_no = _no;
     NSString *t_x = _x;
@@ -194,36 +186,31 @@
     NSString *t_z = [NSString stringWithFormat:@"%@.%d%d%d", z, arr[0], arr[1], arr[2]];
     NSString *t_idc = [NSString stringWithFormat:@"%d%@", arr[3], crc];
     
+    
     NSURL *url = [NSURL URLWithString:@"http://konka.mymyty.com/GPSBack.do"];
-    ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
-    request.delegate = self;
-    //request.shouldCompressRequestBody = NO;
+    NSLog(@"url = %@", url);
     
     NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithCapacity:5];
-    [postData setObject:t_no forKey:@"no"];
-    [postData setObject:t_x forKey:@"x"];
-    [postData setObject:t_y forKey:@"y"];
-    [postData setObject:t_z forKey:@"z"];
-    [postData setObject:t_idc forKey:@"idc"];
-    //NSLog(@"===postData = %@", postData);
+    [postData setValue:t_no forKey:@"no"];
+    [postData setValue:t_x forKey:@"x"];
+    [postData setValue:t_y forKey:@"y"];
+    [postData setValue:t_z forKey:@"rt"];
+    [postData setValue:t_idc forKey:@"idc"];
+    NSLog(@"===postData = %@", postData);
     
-    
-    // NSData *ttdata = [UtilityClass getResultData:postData];
-    //NSLog(@"111=====%@", ttdata);
-    
-    NSString *jsonString = [postData JSONRepresentation];
-    NSLog(@"Send data:%@",jsonString);
-    
-    NSMutableData *jsonData = (NSMutableData *)[UtilityClass UTF8StringToData:jsonString];
-    //NSLog(@"jsonData = %@", jsonData);
-    
-    [request setPostBody:jsonData];
-    [request buildPostBody];
+    ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
     [request setRequestMethod:@"POST"];
-    [request addRequestHeader:@"Content-Type" value:@"application/x-www-form-urlencoded"];//application/x-www-form-urlencoded
-    //    [request addRequestHeader:@"Connection" value:@"Keep-Alive"];
-    [request setTimeOutSeconds:20];
+    request.delegate = self;
+    
+    //    NSString *jsonString = [postData JSONRepresentation];
+    //    NSLog(@"Send data:%@",jsonString);
+    //    NSData *jsonData = [UtilityClass UTF8StringToData:jsonString];
+    //    NSLog(@"jsonData = %@", jsonData);
+    
+    [request setPostValue:postData forKey:@"http://konka.mymyty.com/GPSBack.do"];
+    [request setTimeOutSeconds:1200];
     [request startAsynchronous]; //异步执行
+    [request release];
 
     
     
@@ -259,9 +246,13 @@
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
     NSLog(@"Response %d ==> %@, =>%@", request.responseStatusCode, [request responseStatusMessage], [request responseString]);
-    NSLog(@"responseHeaders=== %@", [request responseHeaders]);
-    NSLog(@"responseCookies=== %@", [request responseCookies]);
     NSLog(@"responeseData ==== %@", [request responseData]);
+}
+
+- (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
+{
+    //NSLog(@"data123 = %@", data);
+    NSLog(@"456= %@", [UtilityClass DataToUTF8String:data]);
 }
 
 #pragma mark-

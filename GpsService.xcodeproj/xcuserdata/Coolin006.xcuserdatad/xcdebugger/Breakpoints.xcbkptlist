@@ -9,26 +9,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "GpsService/ActivateViewController.m"
-         timestampString = "353583371.744755"
+         timestampString = "353843952.397589"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "418"
-         endingLineNumber = "418"
+         startingLineNumber = "417"
+         endingLineNumber = "417"
          landmarkName = "-request:didReceiveData:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "GpsService/ActivateViewController.m"
-         timestampString = "353583310.886078"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "353"
-         endingLineNumber = "353"
-         landmarkName = "-actionConfirm"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

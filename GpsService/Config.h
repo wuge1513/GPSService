@@ -14,4 +14,7 @@
 
 #define LL_DEBUG
 
+//公司确认码
+#define COMPANY_NUM     @"550b04d4"
+
 #endif
