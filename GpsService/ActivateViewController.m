@@ -11,7 +11,7 @@
 #import "UtilityClass.h"
 #import "PBEWithMD5AndDES.h"
 #import "LLFileManage.h"
-//ASIHttpRequest
+
 #import "ASIFormDataRequest.h"
 #import "TBXML.h"
 #import "SBJson.h"
@@ -256,8 +256,7 @@
     NSString *alertStr = @"";
     if ([self.tfPhoneNum.text isEqualToString:@""] || self.tfPhoneNum.text == nil ||
         [self.tfPersonNum.text isEqualToString:@""] || self.tfPersonNum.text == nil) {
-        
-        
+
         if ([self.tfPhoneNum.text isEqualToString:@""] || self.tfPhoneNum.text == nil) {
             alertStr = @"手机号码不能为空！";
         }else if ([self.tfPersonNum.text isEqualToString:@""] || self.tfPersonNum.text == nil) {

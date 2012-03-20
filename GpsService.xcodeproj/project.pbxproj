@@ -44,8 +44,8 @@
 		CEDC8F6D14F8A8D7009E7D13 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC8F6C14F8A8D7009E7D13 /* SystemConfiguration.framework */; };
 		CEDC8F6F14F8A8EB009E7D13 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC8F6E14F8A8EB009E7D13 /* Security.framework */; };
 		CEDD936F15009CA400278F0C /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDD936E15009CA400278F0C /* NSData+CRC32.m */; };
+		CEE16B43151701EC00E72FE2 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = CEE16B42151701EC00E72FE2 /* config.xml */; };
 		CEE61DF7150E1E3F0074F764 /* LLFileManage.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE61DF6150E1E3F0074F764 /* LLFileManage.m */; };
-		CEE61DFE150E28AF0074F764 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = CEE61DFD150E28AF0074F764 /* config.xml */; };
 		CEEA940714F5826000E9E79D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEA940614F5826000E9E79D /* UIKit.framework */; };
 		CEEA940914F5826000E9E79D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEA940814F5826000E9E79D /* Foundation.framework */; };
 		CEEA940B14F5826000E9E79D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEA940A14F5826000E9E79D /* CoreGraphics.framework */; };
@@ -134,9 +134,9 @@
 		CEDC8F6E14F8A8EB009E7D13 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CEDD936D15009CA400278F0C /* NSData+CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC32.h"; sourceTree = "<group>"; };
 		CEDD936E15009CA400278F0C /* NSData+CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC32.m"; sourceTree = "<group>"; };
+		CEE16B42151701EC00E72FE2 /* config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
 		CEE61DF5150E1E3E0074F764 /* LLFileManage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLFileManage.h; path = LLFileManage/LLFileManage.h; sourceTree = SOURCE_ROOT; };
 		CEE61DF6150E1E3F0074F764 /* LLFileManage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLFileManage.m; path = LLFileManage/LLFileManage.m; sourceTree = SOURCE_ROOT; };
-		CEE61DFD150E28AF0074F764 /* config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
 		CEEA940214F5826000E9E79D /* GpsService.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GpsService.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEEA940614F5826000E9E79D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CEEA940814F5826000E9E79D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -358,8 +358,8 @@
 			isa = PBXGroup;
 			children = (
 				CEEA940E14F5826000E9E79D /* GpsService-Info.plist */,
-				CEE61DFD150E28AF0074F764 /* config.xml */,
 				CEEA940F14F5826000E9E79D /* InfoPlist.strings */,
+				CEE16B42151701EC00E72FE2 /* config.xml */,
 				A9917D901504BF9D00D1FC34 /* Localizable.strings */,
 				CEEA941214F5826000E9E79D /* main.m */,
 				CEEA941414F5826000E9E79D /* GpsService-Prefix.pch */,
@@ -422,7 +422,7 @@
 				CEEA942314F5826000E9E79D /* ActivateViewController.xib in Resources */,
 				CEEA943C14F851FF00E9E79D /* GpsInfoViewController.xib in Resources */,
 				A9917D911504BF9D00D1FC34 /* Localizable.strings in Resources */,
-				CEE61DFE150E28AF0074F764 /* config.xml in Resources */,
+				CEE16B43151701EC00E72FE2 /* config.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

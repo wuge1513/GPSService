@@ -10,13 +10,13 @@
 
 @interface UtilityClass : NSObject
 
-/**
+/*!
  * 获取格式化系统时间
  * @param timeFormat 输出系统时间格式 yyyy-MM-dd HH:mm:ss.SSS 可以精确到毫秒
  */
 + (NSString *)getSystemTime:(NSString *)timeFormatStr;
 
-/**
+/*!
  * 校验随机数是否已存在
  * @param muArray数组内存放NSNumber数据
  * @param num 生成的随机数
@@ -29,12 +29,15 @@
  */
 + (NSMutableArray *)transArray:(NSMutableArray *)muArray;
 
+/*!
+ * CRC32编码 
+ */
 + (NSString *)getCRC32Code:(NSString *)srcString;
 
 + (NSData*) hexStrToBytes:(NSString*)strHex;
 + (NSString *)bytesToHexStr:(NSData *)data;
 
-/**
+/*!
  * 获取校验码 
  *@param no 加密的手机号码
  *@param encryptLongitude 加密后的经度
@@ -48,13 +51,13 @@
                   systemTime:(NSString *)z 
                    tranArray:(NSMutableArray *)tranArray;
 
-/*
+/*!
  * 核对校验码 函数不作null检查 
- * @prama   no 加密的手机号码 
- * @prama   x 加密后的经度 
- * @prama   y 加密后的经度 
- * @prama   z 手机时间不加密，格式如 yyyy-MM-dd HH:mm:ss
- * @prama   idc
+ * @param   no 加密的手机号码 
+ * @param   x 加密后的经度 
+ * @param   y 加密后的经度 
+ * @param   z 手机时间不加密，格式如 yyyy-MM-dd HH:mm:ss
+ * @param   idc
  */
 + (BOOL)checkVerifyCode:(NSString *)no 
        encryptLongitude:(NSString *)x 

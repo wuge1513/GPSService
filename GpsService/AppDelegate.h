@@ -19,5 +19,7 @@
 - (void)actionAPP;
 //启动检查配置更新
 - (void)checkUpConfig;
+//获得激活http地址
+- (void)getHostStr:(NSData *)data;
 
 @end
