@@ -246,6 +246,10 @@ static const NSInteger LOCAL_RAND_MAX = 10;
 #pragma mark- MD5校验
 //add by liulei
 
+/*!
+ * 获取MD5校验码
+ * @param C 字符串
+ */
 + (NSString *)md5DigestCString:(const char *)str
 {
     const char *cStr = str;//[str UTF8String];
@@ -258,6 +262,10 @@ static const NSInteger LOCAL_RAND_MAX = 10;
             ];
 }
 
+/*!
+ * 获取MD5校验码
+ * @param NSString字符串对象
+ */
 + (NSString *)md5Digest:(NSString *)str
 {
     const char *cStr = [str UTF8String];
@@ -268,6 +276,57 @@ static const NSInteger LOCAL_RAND_MAX = 10;
             result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7],
             result[8], result[9], result[10], result[11], result[12], result[13], result[14], result[15]
             ];
+}
+
+/*!
+ * 获取定时时间增量
+ * @param strHour  小时字符串
+ * @param strHour  分钟字符串
+ * @return 定时时间与系统时间增量
+ */
++ (NSInteger)getTimeInterval:(NSString *)strHour strMin:(NSString *)strMinute{
+    NSLog(@"获取定时时间增量");
+    
+    NSDate* nowDate = [NSDate date];
+	
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+	
+    NSDateComponents *dateComps = [[NSDateComponents alloc] init];
+	
+    NSInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekdayCalendarUnit |
+	NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+	dateComps = [calendar components:unitFlags fromDate:nowDate];
+	
+    NSInteger nowHour = [dateComps hour];
+	NSInteger nowMin = [dateComps minute];
+	NSInteger nowSec = [dateComps second]; 
+	
+	NSLog(@"定时时间 = %d时,%d分,%d秒",nowHour,nowMin,nowSec);
+    
+	NSInteger htime1= [strHour integerValue];
+	NSInteger mtime1= [strMinute integerValue];
+    
+	NSInteger hs = htime1 - nowHour;
+	NSInteger ms = mtime1 - nowMin;
+	
+	if(ms<0){
+		ms=ms+60;
+		hs=hs-1;
+	}
+	if(hs<0){
+		hs=hs+24;
+		hs=hs-1;
+	}
+	if (ms<=0&&hs<=0){
+		hs=24;
+		ms=0;
+        NSLog(@"第二天！");
+	}
+	
+    
+	NSInteger hm = (hs * 3600 ) + (ms * 60) - nowSec;
+    
+    return hm;
 }
 
 @end

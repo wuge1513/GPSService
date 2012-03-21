@@ -72,8 +72,25 @@
 + (NSString*)DataToUTF8String:(NSData*)data;
 + (NSData*)UTF8StringToData:(NSString*)str;
 
-+ (NSString *)md5Digest:(NSString *)str;
+/*!
+ * 获取MD5校验码
+ * @param C 字符串
+ */
 + (NSString *)md5DigestCString:(const char *)str;
 
+/*!
+ * 获取MD5校验码
+ * @param NSString字符串对象
+ */
++ (NSString *)md5Digest:(NSString *)str;
+
+
+/*!
+ * 获取定时时间增量
+ * @param strHour  小时字符串
+ * @param strHour  分钟字符串
+ * @return 定时时间与系统时间增量
+ */
++ (NSInteger)getTimeInterval:(NSString *)strHour strMin:(NSString *)strMinute;
 
 @end

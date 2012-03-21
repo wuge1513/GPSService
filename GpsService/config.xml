@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mobileconfig>
     <return-info>
-       <return-code>1</return-code>
-       <msg>恭喜，您已通过公司确认！</msg>
+        <return-code>1</return-code>
+        <msg>恭喜，您已通过公司确认！</msg>
     </return-info>
-
-    <mobile-no>13012345674</mobile-no>
-
+    
+    <mobile-no>18801167317</mobile-no>
+    
 	<confirm>
-       <rx>550b04d4</rx>
-       <ry>19070981</ry>	
-       <confirm-url>http://konka.mymyty.com/GPSConfig.do</confirm-url>
+        <rx>550b04d4</rx>
+        <ry>550c527f</ry>	
+        <confirm-url>http://konka.mymyty.com/GPSConfig.do</confirm-url>
 	</confirm>
-
+    
 	<config-update>
-       <cx>cff36b07</cx>
-       <cy>1.2</cy>
-	   <config-update-url>http://konka.mymyty.com/GPSConfig.do</config-update-url>
-       <time>8:30,13:30</time>
+        <cx>0a4a174c</cx>
+        <cy>1.2</cy>
+        <config-update-url>http://konka.mymyty.com/GPSConfig.do</config-update-url>
+        <time>8:30,13:30</time>
     </config-update>
-
+    
 	<soft-update>
-       <version>1.0</version>
-       <update-url>http://konka.mymyty.com/soft/test.apk</update-url>
-       <description>2012</description>
+        <version>1.0</version>
+        <update-url>http://konka.mymyty.com/soft/test.apk</update-url>
+        <description>2012</description>
     </soft-update>
-
+    
     <location>
-       <send-year>2012</send-year>
-       <send-month>2</send-month>
-       <send-date>1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1</send-date>
-       <send-time>08:30:00--12:00:00,13:30:00--17:30:00</send-time>
-       <time_interval>1800</time_interval>
-       <manual>true</manual>
-       <send-url>http://konka.mymyty.com/GPSBack.do</send-url>
+        <send-year>2012</send-year>
+        <send-month>3</send-month>
+        <send-date>1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0</send-date>
+        <send-time>08:00:00--12:00:00</send-time>
+        <time_interval>600</time_interval>
+        <manual>true</manual>
+        <send-url>http://konka.mymyty.com/GPSBack.do</send-url>
     </location>
-
+    
     <company-info>
-       <page-url>http://konka.mymyty.com</page-url>
+        <page-url>http://konka.mymyty.com</page-url>
     </company-info>
-
+    
 </mobileconfig>

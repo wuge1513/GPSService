@@ -24,6 +24,7 @@
 		A98F2FE914FB4459009E8CEB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98F2FE814FB4459009E8CEB /* CoreLocation.framework */; };
 		A9917D891504AB5E00D1FC34 /* CompanyInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9917D881504AB5E00D1FC34 /* CompanyInfoViewController.m */; };
 		A9917D911504BF9D00D1FC34 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9917D901504BF9D00D1FC34 /* Localizable.strings */; };
+		A9EE737E151C501300630484 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = A9EE737D151C501300630484 /* config.xml */; };
 		CEDC8F2214F8A1C7009E7D13 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC8F2114F8A1C7009E7D13 /* libz.dylib */; };
 		CEDC8F4214F8A4F9009E7D13 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDC8F2F14F8A4F9009E7D13 /* ASIAuthenticationDialog.m */; };
 		CEDC8F4314F8A4F9009E7D13 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDC8F3214F8A4F9009E7D13 /* ASIDataCompressor.m */; };
@@ -44,7 +45,7 @@
 		CEDC8F6D14F8A8D7009E7D13 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC8F6C14F8A8D7009E7D13 /* SystemConfiguration.framework */; };
 		CEDC8F6F14F8A8EB009E7D13 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC8F6E14F8A8EB009E7D13 /* Security.framework */; };
 		CEDD936F15009CA400278F0C /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDD936E15009CA400278F0C /* NSData+CRC32.m */; };
-		CEE16B43151701EC00E72FE2 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = CEE16B42151701EC00E72FE2 /* config.xml */; };
+		CEE16B43151701EC00E72FE2 /* configx.xml in Resources */ = {isa = PBXBuildFile; fileRef = CEE16B42151701EC00E72FE2 /* configx.xml */; };
 		CEE61DF7150E1E3F0074F764 /* LLFileManage.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE61DF6150E1E3F0074F764 /* LLFileManage.m */; };
 		CEEA940714F5826000E9E79D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEA940614F5826000E9E79D /* UIKit.framework */; };
 		CEEA940914F5826000E9E79D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEA940814F5826000E9E79D /* Foundation.framework */; };
@@ -95,6 +96,7 @@
 		A9917D881504AB5E00D1FC34 /* CompanyInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyInfoViewController.m; sourceTree = "<group>"; };
 		A9917D8F1504B59B00D1FC34 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		A9917D901504BF9D00D1FC34 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		A9EE737D151C501300630484 /* config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
 		CEDC8F2114F8A1C7009E7D13 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		CEDC8F2E14F8A4F9009E7D13 /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
 		CEDC8F2F14F8A4F9009E7D13 /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
@@ -134,7 +136,7 @@
 		CEDC8F6E14F8A8EB009E7D13 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CEDD936D15009CA400278F0C /* NSData+CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC32.h"; sourceTree = "<group>"; };
 		CEDD936E15009CA400278F0C /* NSData+CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC32.m"; sourceTree = "<group>"; };
-		CEE16B42151701EC00E72FE2 /* config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
+		CEE16B42151701EC00E72FE2 /* configx.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = configx.xml; sourceTree = "<group>"; };
 		CEE61DF5150E1E3E0074F764 /* LLFileManage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLFileManage.h; path = LLFileManage/LLFileManage.h; sourceTree = SOURCE_ROOT; };
 		CEE61DF6150E1E3F0074F764 /* LLFileManage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLFileManage.m; path = LLFileManage/LLFileManage.m; sourceTree = SOURCE_ROOT; };
 		CEEA940214F5826000E9E79D /* GpsService.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GpsService.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -359,7 +361,8 @@
 			children = (
 				CEEA940E14F5826000E9E79D /* GpsService-Info.plist */,
 				CEEA940F14F5826000E9E79D /* InfoPlist.strings */,
-				CEE16B42151701EC00E72FE2 /* config.xml */,
+				CEE16B42151701EC00E72FE2 /* configx.xml */,
+				A9EE737D151C501300630484 /* config.xml */,
 				A9917D901504BF9D00D1FC34 /* Localizable.strings */,
 				CEEA941214F5826000E9E79D /* main.m */,
 				CEEA941414F5826000E9E79D /* GpsService-Prefix.pch */,
@@ -422,7 +425,8 @@
 				CEEA942314F5826000E9E79D /* ActivateViewController.xib in Resources */,
 				CEEA943C14F851FF00E9E79D /* GpsInfoViewController.xib in Resources */,
 				A9917D911504BF9D00D1FC34 /* Localizable.strings in Resources */,
-				CEE16B43151701EC00E72FE2 /* config.xml in Resources */,
+				CEE16B43151701EC00E72FE2 /* configx.xml in Resources */,
+				A9EE737E151C501300630484 /* config.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

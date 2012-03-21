@@ -14,9 +14,7 @@
 
 @property (strong, nonatomic) UINavigationController *navigationController;
 
-
-//测试
-- (void)actionAPP;
+@property (strong, nonatomic) NSArray *configTimeArr;  //配置文件更新时间
 //启动检查配置更新
 - (void)checkUpConfig;
 //获得激活http地址

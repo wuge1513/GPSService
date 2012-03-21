@@ -27,7 +27,7 @@ NSInteger count = 2;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = NSLocalizedString(@"定位服务程序", nil);
+        //self.title = NSLocalizedString(@"定位服务程序", nil);
         
         //自定义按钮
 //        UIButton *selectButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -77,7 +77,7 @@ NSInteger count = 2;
     self.lblServiceState.backgroundColor = [UIColor clearColor];
     //self.lblServiceState.textColor = [UIColor blueColor];
     self.lblServiceState.textAlignment = UITextAlignmentCenter;
-    [self.view addSubview:self.lblServiceState];
+    //[self.view addSubview:self.lblServiceState];
     [_lblServiceState release];
     
 
@@ -87,7 +87,7 @@ NSInteger count = 2;
     self.itemTableView.backgroundColor = [UIColor clearColor];
     self.itemTableView.delegate = self;
     self.itemTableView.dataSource = self;
-    [self.view addSubview:self.itemTableView];
+   // [self.view addSubview:self.itemTableView];
     
 	
 }
