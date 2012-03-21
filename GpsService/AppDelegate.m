@@ -29,9 +29,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSLog(@"000");
+    [self actionAPP];
     
     //启动检查配置更新
-    [self checkUpConfig];
+    //[self checkUpConfig];
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
@@ -66,6 +67,7 @@
 		NSDate *now=[NSDate new];
 		notification.fireDate = [now dateByAddingTimeInterval:10];
 		notification.timeZone = [NSTimeZone defaultTimeZone];
+        //notification.
 		notification.soundName = @"ping.caf";
 		notification.alertBody = @"hello,hello";
 		NSDictionary *userinfo = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -81,7 +83,7 @@
 {
 
     NSLog(@"003 app will enter foreground");
-    [self actionAPP];
+    //[self actionAPP];
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
@@ -108,6 +110,9 @@
 //测试
 - (void)actionAPP{
     NSLog(@"12345678");
+    NSDictionary *dic = [[NSDictionary alloc] init];
+    dic = [NSCalendar currentCalendar];
+    NSLog(@"---- = %@", dic);
     
 }
 
@@ -212,18 +217,18 @@
             NSLog(@"url = %@", url);
             
             //检查配置文件是否升级
-            NSMutableDictionary *postData = [NSMutableDictionary dictionaryWithCapacity:5];
-            [postData setValue:no forKey:@"no"];
-            [postData setValue:cx forKey:@"cx"];
-            [postData setValue:cy forKey:@"cy"];
-            [postData setValue:_ct forKey:@"ct"];
-            [postData setValue:_idc forKey:@"idc"];
             
             ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
             [request setRequestMethod:@"POST"];
             request.delegate = self;
-            [request setPostValue:postData forKey:@"http://konka.mymyty.com/GPSBack.do"];
-            [request setTimeOutSeconds:1200];
+            [request setAllowCompressedResponse:NO];
+            
+            [request setPostValue: no forKey:@"no"];
+            [request setPostValue: cx forKey:@"cx"];
+            [request setPostValue: cy forKey:@"cy"];
+            [request setPostValue: _ct forKey:@"ct"];
+            [request setPostValue:_idc forKey:@"idc"];
+            [request setTimeOutSeconds:1000];
             [request startAsynchronous]; //异步执行
             [request release];
             
@@ -231,28 +236,56 @@
     }
 }
 
-- (void)requestFinished:(ASIHTTPRequest *)request {
-    NSLog(@"Response %d ==> %@, =>%@", request.responseStatusCode, [request responseStatusMessage], [request responseString]);
-    
-    
-    NSLog(@"responeseData ==== %@", [request responseData]);
-    NSLog(@"xxx = %@", request);
-    
-    NSData *response = [request responseData];
-    
-    //[LLFileManage WritteToFile:response FileName:@"config.xml"];
-    NSLog(@"response = %@ ", response);
-    
-	NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(NSUTF8StringEncoding);//kCFStringEncodingGB_18030_2000
-    NSString *retStr = [[[NSString alloc] initWithData:response encoding:enc] autorelease];
-    NSLog(@"retstr = %@", retStr);
-
-}
-
 - (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
 {
-    //NSLog(@"data123 = %@", data);
-    NSLog(@"456= %@", [UtilityClass DataToUTF8String:data]);
+    NSAssert(data, @"Check config request: receive data is nil.");
+    
+    NSLog(@"----xml = %@", [UtilityClass DataToUTF8String:data]);
+    
+    TBXML *tbxml = [TBXML tbxmlWithXMLData:data error:nil];
+    
+    TBXMLElement * root = tbxml.rootXMLElement;
+	
+	if (root) {
+        
+        NSString *strCX = @"";
+        NSString *strCY = @"";
+        NSString *strUrl = @"";
+        NSString *strTime = @"";
+        
+		TBXMLElement *config_update = [TBXML childElementNamed:@"config-update" parentElement:root];
+        if (config_update) {
+            
+            TBXMLElement *cx = [TBXML childElementNamed:@"cx" parentElement:config_update];
+            if (cx) {
+                strCX = [TBXML textForElement:cx];
+                NSLog(@"=== strCX = %@", strCX);
+            }
+            
+            //配置文件版本号
+            TBXMLElement *cy = [TBXML childElementNamed:@"cy" parentElement:config_update];
+            if (cy) {
+                strCY = [TBXML textForElement:cy];
+                NSLog(@"=== strCY = %@", cy);
+            }
+            
+            //配置文件更新地址
+            TBXMLElement *configUrl = [TBXML childElementNamed:@"config-update-url" parentElement:config_update];
+            if (configUrl) {
+                strUrl = [TBXML textForElement:configUrl];
+                NSLog(@"=== strURL = %@", strUrl);
+            }
+            
+            //配置文件更新时间
+            TBXMLElement *configTime = [TBXML childElementNamed:@"time" parentElement:config_update];
+            if (configTime) {
+                strTime = [TBXML textForElement:configTime];
+                NSLog(@"=== strTime = %@", strTime);
+            }
+            //配置文件更新到本地沙盒
+            [LLFileManage WritteToFile:data FileName:@"config.xml"];
+        }
+    }
 }
 
 @end

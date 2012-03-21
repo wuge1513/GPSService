@@ -161,7 +161,8 @@ NSInteger count = 2;
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    return (interfaceOrientation == UIInterfaceOrientationPortrait ||
+            interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown);
 }
 
 // Customize the number of sections in the table view.
@@ -204,7 +205,7 @@ NSInteger count = 2;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BOOL isActivati = [[NSUserDefaults standardUserDefaults] boolForKey:ACTIVATION_LOCALSTR];
+    BOOL isActivati = YES;//[[NSUserDefaults standardUserDefaults] boolForKey:ACTIVATION_LOCALSTR];
     if (!isActivati) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"提示", nil) 
                                                         message:NSLocalizedString(@"请先激活", nil) 

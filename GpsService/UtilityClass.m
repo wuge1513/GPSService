@@ -9,6 +9,7 @@
 #import "UtilityClass.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "NSData+CRC32.h"
+
 @implementation UtilityClass
 
 static const NSInteger LOCAL_RAND_MAX = 10;
@@ -268,41 +269,6 @@ static const NSInteger LOCAL_RAND_MAX = 10;
             result[8], result[9], result[10], result[11], result[12], result[13], result[14], result[15]
             ];
 }
-
-
-
-+(NSString *)createPostURL:(NSMutableDictionary *)params
-{
-    NSString *postString=@"";
-    for(NSString *key in [params allKeys])
-    {
-        NSString *value=[params objectForKey:key];
-        postString=[postString stringByAppendingFormat:@"%@=%@&",key,value];
-    }
-    if([postString length]>1)
-    {
-        postString=[postString substringToIndex:[postString length]-1];
-    }
-    return postString;
-}
-
-
-+(NSData *)getResultData:(NSMutableDictionary *)params
-{
-    
-    NSString *postURL=[self createPostURL:params];
-    NSLog(@"postURL123 = %@", postURL);
-    NSError *error;
-    NSURLResponse *theResponse;
-    NSMutableURLRequest *theRequest=[NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://konka.mymyty.com/GPSBack.do"]];
-    [theRequest setHTTPMethod:@"POST"];
-    [theRequest setHTTPBody:[postURL dataUsingEncoding:NSUTF8StringEncoding]];
-    [theRequest addValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    return [NSURLConnection sendSynchronousRequest:theRequest returningResponse:&theResponse error:&error];
-}
-
-
-
 
 @end
 

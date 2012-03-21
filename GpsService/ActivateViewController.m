@@ -33,7 +33,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = @"身份确认";//NSLocalizedString(@"Detail", @"Detail");
+        self.title = NSLocalizedString(@"身份确认", nil);
     
         //默认返回按钮
         UIBarButtonItem *leftButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:@selector(actionBack)];
@@ -79,7 +79,7 @@
     //手机号标签
     UILabel *_lblPhoneNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 100.0, 30.0)];
     self.lblPhoneNum = _lblPhoneNum;
-    self.lblPhoneNum.text = @"确认手机号";
+    self.lblPhoneNum.text = NSLocalizedString(@"确认手机号", nil);
     self.lblPhoneNum.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.lblPhoneNum];
     [_lblPhoneNum release];
@@ -95,7 +95,7 @@
     //个人确认码
     UILabel *_lblPersonNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 120.0, 100.0, 30.0)];
     self.lblPersonNum = _lblPersonNum;
-    self.lblPersonNum.text = @"个人确认码";
+    self.lblPersonNum.text = NSLocalizedString(@"个人确认码", nil);
     self.lblPersonNum.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.lblPersonNum];
     [_lblPersonNum release];
@@ -106,6 +106,7 @@
     self.tfPhoneNum.borderStyle = UITextBorderStyleRoundedRect;
     self.tfPhoneNum.delegate = self;
     self.tfPhoneNum.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    self.tfPhoneNum.tag = 10001;
     [self.view addSubview:self.tfPhoneNum];
     [_tfPhoneNum release];
     
@@ -126,15 +127,16 @@
     self.tfPersonNum.delegate = self;
     self.tfPersonNum.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     //self.tfPhoneNum.backgroundColor = [UIColor grayColor];
+    self.tfPersonNum.tag = 10002;
     [self.view addSubview:self.tfPersonNum];
     [_tfPersonNum release];
     
     //个人确认码8ee1c03a 公司确认550b04d4 
     
     //13012345673	d0a87429
-    self.tfPhoneNum.text = @"18801167317";//13012345675
+    //self.tfPhoneNum.text = @"18801167317";//13012345675
     //self.tfCompanyNum.text = @"550b04d4"; //不变
-    self.tfPersonNum.text = @"8ee1c03a";//84b43398 19070981
+    //self.tfPersonNum.text = @"550c527f";//84b43398 19070981
     
 	//判断配置文件是否已经下载
     NSString *fileName = @"config.xml";
@@ -163,9 +165,9 @@
     TBXMLElement * root = tbxml.rootXMLElement;
 	
 	if (root) {
-		TBXMLElement *location = [TBXML childElementNamed:@"location" parentElement:root];
-        if (location) {
-            TBXMLElement *confirmUrl = [TBXML childElementNamed:@"send-url" parentElement:location];
+		TBXMLElement *confirm = [TBXML childElementNamed:@"confirm" parentElement:root];
+        if (confirm) {
+            TBXMLElement *confirmUrl = [TBXML childElementNamed:@"confirm-url" parentElement:confirm];
             if (confirmUrl) {
                 NSString *str = [TBXML textForElement:confirmUrl];
                 self.strHost = str;
@@ -209,6 +211,24 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+
+//限制输入框字数
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.tag == 10001) {
+        if (range.location >= 11)
+            return NO; // return NO to not change text
+        return YES;
+    }
+    
+    if (textField.tag == 10002) {
+        if (range.location >= 8)
+            return NO; // return NO to not change text
+        return YES;
+    }
+    return YES;
+}
+
 //收回虚拟键盘
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 	[self.tfPhoneNum resignFirstResponder];
@@ -221,18 +241,7 @@
 - (void)actionBack
 {
     [self.navigationController popViewControllerAnimated:YES];
-    
-    //    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"定位服务程序" 
-    //                                                    message:@"恭喜,您已通过公司认证!" 
-    //                                                   delegate:self 
-    //                                          cancelButtonTitle:@"确定" 
-    //                                          otherButtonTitles:nil, nil];
-    //    
-    //    [alert show];
-    //    [alert release];
-    //激活成功
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:ACTIVATION_LOCALSTR];
- 
+
 }
 
 //确认
@@ -240,8 +249,8 @@
 /**
  * 用户信息提交按HTTP协议，通过post方法提交以指定的服务地址中，提交的信息字段定义如下：
  * @param  no   手机号码    需要加密
- * @param  rx   公司确认码(短信通知，10个字符） 不加密
- * @param  ry   个人确认码(短信通知，10个字符） 不加密
+ * @param  rx   公司确认码(短信通知，10个字符） 加密
+ * @param  ry   个人确认码(短信通知，10个字符） 加密
  * @param  rt   手机时间  (安全校验用)  不需加密      
  * @param  idc  校验码
  * @post   http://konka.mymyty.com/GPSBack.do?no=18238186018&rx=aaa&ry=bbb&rt=2012-02-13 12:00:30.098&idc=3xxaaddd
@@ -258,21 +267,22 @@
         [self.tfPersonNum.text isEqualToString:@""] || self.tfPersonNum.text == nil) {
 
         if ([self.tfPhoneNum.text isEqualToString:@""] || self.tfPhoneNum.text == nil) {
-            alertStr = @"手机号码不能为空！";
+            alertStr = NSLocalizedString(@"手机号码不能为空！", nil);
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"警告", nil) 
+                                                            message:alertStr 
+                                                           delegate:self 
+                                                  cancelButtonTitle:NSLocalizedString(@"确定", nil) 
+                                                  otherButtonTitles:nil, nil];
+            
+            [alert show];
+            [alert release];
+            
+            return;
         }else if ([self.tfPersonNum.text isEqualToString:@""] || self.tfPersonNum.text == nil) {
-            alertStr = @"个人确认码不能为空！";
+            //若为空则赋值1
+            self.tfPersonNum.text = @"1";
         }
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"警告" 
-                                                        message:alertStr 
-                                                       delegate:self 
-                                              cancelButtonTitle:@"确定" 
-                                              otherButtonTitles:nil, nil];
-        
-        [alert show];
-        [alert release];
-        
-        return;
     }
     
     NSString *no = self.tfPhoneNum.text;   //手机号码
@@ -326,8 +336,8 @@
     
 
     // 手机发送的数据相当于以下
-    NSString *postStr = [NSString stringWithFormat:@"no=%@&rx=%@&ry=%@&rt=%@.%d%d%d&idc=%d%@", _no, rx, ry, rt, arr[0], arr[1], arr[2], arr[3], crc];
-    NSLog(@"手机发送信息：%@", postStr);
+//    NSString *postStr = [NSString stringWithFormat:@"no=%@&rx=%@&ry=%@&rt=%@.%d%d%d&idc=%d%@", _no, rx, ry, rt, arr[0], arr[1], arr[2], arr[3], crc];
+//    NSLog(@"手机发送信息：%@", postStr);
 
 
     NSString *_rt = [NSString stringWithFormat:@"%@.%d%d%d", rt, arr[0], arr[1], arr[2]];
@@ -335,28 +345,20 @@
     NSString *_idc= [NSString stringWithFormat:@"%d%@", arr[3], crc];
     NSLog(@"_idc = %@", _idc);
     
-    NSURL *url = [NSURL URLWithString:@"http://konka.mymyty.com/GPSBack.do"];
+    NSURL *url = [NSURL URLWithString:self.strHost];//@"http://konka.mymyty.com/GPSConfig.do"
     NSLog(@"url = %@", url);
     
-    NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithCapacity:5];
-    [postData setValue:_no forKey:@"no"];
-    [postData setValue:_rx forKey:@"rx"];
-    [postData setValue:_ry forKey:@"ry"];
-    [postData setValue:_rt forKey:@"rt"];
-    [postData setValue:_idc forKey:@"idc"];
-    NSLog(@"===postData = %@", postData);
-
     ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
     [request setRequestMethod:@"POST"];
     request.delegate = self;
+    [request setAllowCompressedResponse:NO];
 
-//    NSString *jsonString = [postData JSONRepresentation];
-//    NSLog(@"Send data:%@",jsonString);
-//    NSData *jsonData = [UtilityClass UTF8StringToData:jsonString];
-//    NSLog(@"jsonData = %@", jsonData);
-    
-    [request setPostValue:postData forKey:@"http://konka.mymyty.com/GPSBack.do"];
-    [request setTimeOutSeconds:1200];
+    [request setPostValue: _no forKey:@"no"];
+    [request setPostValue:_rx forKey:@"rx"];
+    [request setPostValue:_ry forKey:@"ry"];
+    [request setPostValue:_rt forKey:@"rt"];
+    [request setPostValue:_idc forKey:@"idc"];
+    [request setTimeOutSeconds:1000];
     [request startAsynchronous]; //异步执行
     [request release];
         
@@ -386,127 +388,52 @@
 
 }
 
-- (void)requestFinished:(ASIHTTPRequest *)request {
-    NSLog(@"Response %d ==> %@, =>%@", request.responseStatusCode, [request responseStatusMessage], [request responseString]);
-    
-
-    NSLog(@"responeseData ==== %@", [request responseData]);
-    NSLog(@"xxx = %@", request);
-    
-    NSData *response = [request responseData];
-    
-    //[LLFileManage WritteToFile:response FileName:@"config.xml"];
-    NSLog(@"response = %@ ", response);
-    
-	NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(NSUTF8StringEncoding);//kCFStringEncodingGB_18030_2000
-    NSString *retStr = [[[NSString alloc] initWithData:response encoding:enc] autorelease];
-    NSLog(@"retstr = %@", retStr);
-    
-    NSString *jsonString = [[request responseData] JSONRepresentation];
-    NSLog(@"Json data:%@",jsonString);
-}
-
-- (void)request:(ASIHTTPRequest *)request didReceiveResponseHeaders:(NSDictionary *)responseHeaders
-{
-    //NSLog(@"responseHeaders = %@", responseHeaders);
-}
-
 - (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
 {
-    //NSLog(@"data123 = %@", data);
-    NSLog(@"456= %@", [UtilityClass DataToUTF8String:data]);
-}
-
-
-
-- (void)Getdata:(ASIHTTPRequest *)request
-{	
-	//[tooles removeHUD];	
-	NSData *response = [request responseData];
     
-    //[LLFileManage WritteToFile:response FileName:@"config.xml"];
-	 NSLog(@"response = %@ ", response);
+    NSAssert(data, @"Activate request: receive data is nil.");
     
-	NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-    NSString *retStr = [[[NSString alloc] initWithData:response encoding:enc] autorelease];
+    NSLog(@"----xml = %@", [UtilityClass DataToUTF8String:data]);
     
-     //NSString *retStr = [[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease];
+    TBXML *tbxml = [TBXML tbxmlWithXMLData:data error:nil];
+    
+    TBXMLElement * root = tbxml.rootXMLElement;
 	
-	retStr = [retStr stringByReplacingOccurrencesOfString:@"\"GB2312\"" withString:@"\"UTF-8\""];
-	
-    NSLog(@"测试--------XML:%@",retStr);
-    
-	NSData *data = [retStr dataUsingEncoding:NSUTF8StringEncoding];	
-    NSLog(@"data = %@ ", data);
-	
-}
-
-//网络错误处理
-- (void)GetErr:(ASIHTTPRequest *)request
-{
-    //	[tooles removeHUD];
-    //	[tooles MsgBox:@"连接超时，等会试试"];
-    NSLog(@"失败。。。。");
-    
-    
-}
-
--(void)performRequest{
-    
-//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://konka.mymyty.com/GPSBack.do"]];
-//    
-//    NSString *msgLength = [NSString stringWithFormat:@"%d", [jsonMessage length]];
-//    [request addValue: @"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-//    //[request addValue: jsonAction forHTTPHeaderField:@"JSONAction"];
-//    [request addValue: msgLength forHTTPHeaderField:@"Content-Length"];
-//    [request setHTTPMethod:@"POST"];
-//    [request setHTTPBody: [jsonMessage dataUsingEncoding:NSUTF8StringEncoding]];
-//    NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-//    if( theConnection )
-//    {
-//        webData = [[NSMutableData data] retain];
-//    }
-//    else
-//    {
-//        NSLog(@"theConnection is NULL");
-//    }
-//    [pool release];
-}
-
--(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
-    [webData setLength: 0];
-    //self.resultArray = [[NSMutableArray alloc] init];
-}
--(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
-    NSLog(@"123===data = %@", data);
-    [webData appendData:data];
-}
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    NSLog(@"ERROR with theConenction");
-    //NSDictionary *errorDic = [NSDictionary dictionaryWithObject:error forKey:@"error"];
-    //[self.resultArray addObject:errorDic];
-    [connection release];
-    [webData setLength:0];
-}
--(void)connectionDidFinishLoading:(NSURLConnection *)connection{
-    NSLog(@"DONE. Received Bytes: %d", [webData length]);
-    NSString *theXML = [[NSString alloc] initWithBytes: [webData mutableBytes] length:[webData length] encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", theXML);
-    [theXML release];
-    if([webData length] > 0){
+	if (root) {
         
-        NSLog(@"ok!!!!!!!!!!");
-//        parser = [[NSXMLParser alloc] initWithData:webData];
-//        [parser setDelegate:self];
-//        [parser parse]; 
+        NSString *strCode = @"";
+        NSString *strMsg = @"";
+		TBXMLElement *return_info = [TBXML childElementNamed:@"return-info" parentElement:root];
+        if (return_info) {
+            TBXMLElement *return_code = [TBXML childElementNamed:@"return-code" parentElement:return_info];
+            if (return_code) {
+                strCode = [TBXML textForElement:return_code];
+                //NSLog(@"=== strCode = %@", strCode);
+            }
+            
+            TBXMLElement *msg = [TBXML childElementNamed:@"msg" parentElement:return_info];
+            if (msg) {
+                strMsg = [TBXML textForElement:msg];
+                //NSLog(@"=== strMsg = %@", strMsg);
+            }
+            
+            //激活成功保存配置文件到本地
+            if ([strCode isEqualToString:@"1"]) {
+                [LLFileManage WritteToFile:data FileName:@"config.xml"];
+            }
+            
+            //返回结果提示
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"定位服务程序", nil) 
+                                                            message:strMsg 
+                                                           delegate:self 
+                                                  cancelButtonTitle:NSLocalizedString(@"确定", nil) 
+                                                  otherButtonTitles:nil, nil];
+            
+            [alert show];
+            [alert release];
+        }
     }
 }
 
-
-
-
-
-
-							
+						
 @end

@@ -33,7 +33,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.title = @"定位信息";
+        self.title = NSLocalizedString(@"定位信息", nil);
         
         //默认返回按钮
         UIBarButtonItem *leftButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:@selector(actionBack)];
@@ -110,9 +110,9 @@
 //确认
 - (void)actionConfirm
 {
-    NSString *no = @"13012345678"; //self.tfPhoneNum.text;//
-    NSString *x = @"117.312311023";//self.longitudeTextField.text;// 
-    NSString *y = @"32.4780913";//self.latitudeTextField.text;// 
+    NSString *no = self.tfPhoneNum.text;
+    NSString *x = self.longitudeTextField.text; 
+    NSString *y = self.latitudeTextField.text; 
     NSString *z = [UtilityClass getSystemTime:@"yyyy-MM-dd HH:mm:ss"];//@"2009-12-25 01:37:12";
     
     NSLog(@"加密前：no = %@", no);
@@ -167,19 +167,15 @@
     NSString *crc = [UtilityClass getVertifyCode:_no encryptLongitude:_x encryptLatitude:_y systemTime:z tranArray:transArr];
     NSLog(@"随机序列生成校验码crc = %@", crc);
     
-    // 手机发送的数据相当于以下
-    NSString *postStr = [NSString stringWithFormat:@"no=%@&x=%@&y=%@&z=%@.%d%d%d&idc=%d%@", _no, _x, _y, z, arr[0], arr[1], arr[2], arr[3], crc];
+//    // 手机发送的数据相当于以下
+//    NSString *postStr = [NSString stringWithFormat:@"no=%@&x=%@&y=%@&z=%@.%d%d%d&idc=%d%@", _no, _x, _y, z, arr[0], arr[1], arr[2], arr[3], crc];
+//    NSLog(@"手机发送信息：%@", postStr);
+//    NSLog(@"----------------------");
     
-    NSLog(@"手机发送信息：%@", postStr);
-    NSLog(@"----------------------");
     
     /*!
      * 提交http请求
-     *
      */
-    
-
-    
     NSString *t_no = _no;
     NSString *t_x = _x;
     NSString *t_y = _y;
@@ -190,25 +186,17 @@
     NSURL *url = [NSURL URLWithString:@"http://konka.mymyty.com/GPSBack.do"];
     NSLog(@"url = %@", url);
     
-    NSMutableDictionary *postData = [[NSMutableDictionary alloc] initWithCapacity:5];
-    [postData setValue:t_no forKey:@"no"];
-    [postData setValue:t_x forKey:@"x"];
-    [postData setValue:t_y forKey:@"y"];
-    [postData setValue:t_z forKey:@"rt"];
-    [postData setValue:t_idc forKey:@"idc"];
-    NSLog(@"===postData = %@", postData);
-    
     ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
     [request setRequestMethod:@"POST"];
     request.delegate = self;
+    [request setAllowCompressedResponse:NO];
     
-    //    NSString *jsonString = [postData JSONRepresentation];
-    //    NSLog(@"Send data:%@",jsonString);
-    //    NSData *jsonData = [UtilityClass UTF8StringToData:jsonString];
-    //    NSLog(@"jsonData = %@", jsonData);
-    
-    [request setPostValue:postData forKey:@"http://konka.mymyty.com/GPSBack.do"];
-    [request setTimeOutSeconds:1200];
+    [request setPostValue: t_no forKey:@"no"];
+    [request setPostValue:t_x forKey:@"x"];
+    [request setPostValue:t_y forKey:@"y"];
+    [request setPostValue:t_z forKey:@"z"];
+    [request setPostValue:t_idc forKey:@"idc"];
+    [request setTimeOutSeconds:1000];
     [request startAsynchronous]; //异步执行
     [request release];
 
@@ -243,16 +231,33 @@
     
 }
 
-
-- (void)requestFinished:(ASIHTTPRequest *)request {
-    NSLog(@"Response %d ==> %@, =>%@", request.responseStatusCode, [request responseStatusMessage], [request responseString]);
-    NSLog(@"responeseData ==== %@", [request responseData]);
-}
-
 - (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
 {
-    //NSLog(@"data123 = %@", data);
-    NSLog(@"456= %@", [UtilityClass DataToUTF8String:data]);
+    NSAssert(data, @"GPS info request: data is nil");
+    
+    NSLog(@"json = %@", [UtilityClass DataToUTF8String:data]);
+    
+    NSDictionary *resDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+    NSLog(@"%@", resDic);
+    NSString *resultCode = [resDic objectForKey:@"status"];
+    NSLog(@"resultCode = %@", resultCode);
+    
+    NSString *strResult;
+    if ([resultCode isEqualToString:@"1"]) {
+        strResult = @"上传成功！";
+    }else{
+        strResult = @"上传失败！";
+    }
+    
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" 
+//                                                    message:strResult 
+//                                                   delegate:self 
+//                                          cancelButtonTitle:@"确定" 
+//                                          otherButtonTitles:nil, nil];
+//    
+//    [alert show];
+//    [alert release];
+//    return;
 }
 
 #pragma mark-
@@ -282,20 +287,10 @@
     [lat release];  
     [lng release]; 
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    //[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];//精确到毫秒
-    NSString *locationTime = [dateFormatter stringFromDate:[NSDate date]];
-    NSLog(@"Date%@", [dateFormatter stringFromDate:[NSDate date]]);
-    [dateFormatter release];
-    
-    self.tfLocationTime.text = locationTime;
     self.tfLocationWay.text = @"GPS";
-    self.tfPhoneNum.text = @"13001107514";
     
 }  
+
 //位置管理器不能确定位置信息
 - (void) locationManager: (CLLocationManager *) manager  
         didFailWithError: (NSError *) error {  
@@ -312,28 +307,5 @@
     [alert release];  
 }  
 
-- (void)Getdata:(ASIHTTPRequest *)request
-{	
-	//[tooles removeHUD];	
-	NSData *response = [request responseData];
-	
-	NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-    NSString *retStr = [[[NSString alloc] initWithData:response encoding:enc] autorelease];
-	
-	retStr = [retStr stringByReplacingOccurrencesOfString:@"\"GB2312\"" withString:@"\"UTF-8\""];
-	
-    NSLog(@"测试--------XML:%@",retStr);
-    
-	//NSData *data = [retStr dataUsingEncoding:NSUTF8StringEncoding];	
-	
-}
-
-//网络错误处理
-- (void)GetErr:(ASIHTTPRequest *)request
-{
-//	[tooles removeHUD];
-//	[tooles MsgBox:@"连接超时，等会试试"];
-    NSLog(@"失败。。。。");
-}
 
 @end

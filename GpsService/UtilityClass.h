@@ -75,7 +75,5 @@
 + (NSString *)md5Digest:(NSString *)str;
 + (NSString *)md5DigestCString:(const char *)str;
 
-+(NSData *)getResultData:(NSMutableDictionary *)params;
-+(NSString *)createPostURL:(NSMutableDictionary *)params;
 
 @end
