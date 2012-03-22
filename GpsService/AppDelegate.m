@@ -60,6 +60,17 @@
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
+    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;//应用程序右上角的数字=0（消失）   
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];//取消所有的通知  
+//    NSString *indetifier = [[NSBundle mainBundle] bundleIdentifier];
+//    for (UILocalNotification *notification in [[UIApplication sharedApplication] scheduledLocalNotifications]) {
+//        NSString *indentiString = [notification.userInfo objectForKey:@"Identifier"];
+//        if ([indentiString isEqualToString:indetifier] == YES) {
+//            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+//            break;
+//        }
+//    }
 
     UILocalNotification *notification = [[UILocalNotification alloc] init];
 	if (notification) 
@@ -67,15 +78,25 @@
 		NSDate *now=[NSDate new];
 		notification.fireDate = [now dateByAddingTimeInterval:10];
 		notification.timeZone = [NSTimeZone defaultTimeZone];
+        //notification.repeatInterval = NSWeekCalendarUnit;//一周提示一次
+        //notification.repeatInterval = kCFCalendarUnitDay; //每天一次kCFCalendarUnitDay  NSDayCalendarUnit
         //notification.
-		notification.soundName = @"ping.caf";
+		notification.soundName = UILocalNotificationDefaultSoundName;
 		notification.alertBody = @"hello,hello";
+        notification.applicationIconBadgeNumber = 1; 	
+        notification.alertAction = NSLocalizedString(@"test1", @"121"); 
 		NSDictionary *userinfo = [NSDictionary dictionaryWithObjectsAndKeys:
 								  [NSNumber numberWithInt: 123], @"test",nil];
 		notification.userInfo = userinfo;
+        
+        
+        
+
+        
 		[[UIApplication sharedApplication] scheduleLocalNotification:notification];
 		
 	}
+    [notification release];
     
 }
 
