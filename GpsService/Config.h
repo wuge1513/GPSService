@@ -9,9 +9,6 @@
 #ifndef GpsService_Config_h
 #define GpsService_Config_h
 
-// 判断是否已经激活
-#define  ACTIVATION_LOCALSTR        @"Activation_Local_Str"
-
 #define LL_DEBUG
 
 //公司确认码

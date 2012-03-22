@@ -19,8 +19,9 @@
 @property (strong, nonatomic) UIButton *btnGetInfo;
 @property (strong, nonatomic) ActivateViewController *activateViewController;
 
+//判断号码是否激活
+- (BOOL)isActivation;
+//激活按钮事件
 - (void)actionActivate;
 
-- (IBAction)up:(id)sender;
-- (IBAction)down:(id)sender;
 @end

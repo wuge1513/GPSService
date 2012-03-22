@@ -12,6 +12,8 @@
 
 #import "CompanyInfoViewController.h"
 #import "Config.h"
+#import "LLFileManage.h"
+#import "XMLHelper.h"
 
 
 NSInteger count = 2;
@@ -77,7 +79,7 @@ NSInteger count = 2;
     self.lblServiceState.backgroundColor = [UIColor clearColor];
     //self.lblServiceState.textColor = [UIColor blueColor];
     self.lblServiceState.textAlignment = UITextAlignmentCenter;
-    //[self.view addSubview:self.lblServiceState];
+    [self.view addSubview:self.lblServiceState];
     [_lblServiceState release];
     
 
@@ -87,24 +89,9 @@ NSInteger count = 2;
     self.itemTableView.backgroundColor = [UIColor clearColor];
     self.itemTableView.delegate = self;
     self.itemTableView.dataSource = self;
-   // [self.view addSubview:self.itemTableView];
+    [self.view addSubview:self.itemTableView];
     
 	
-}
-
-- (IBAction)up:(id)sender
-{
-    NSLog(@"up");
-    count = 1;
-    self.itemTableView.frame = CGRectMake(0.0, 0.0, 320.0, 150.0);
-    [self.itemTableView reloadData];
-}
-- (IBAction)down:(id)sender
-{   
-    count = 2;
-    self.itemTableView.frame = CGRectMake(0.0, 80.0, 320.0, 300.0);
-    [self.itemTableView reloadData];
-    NSLog(@"down");
 }
 
 //激活按钮事件
@@ -141,6 +128,11 @@ NSInteger count = 2;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if ([self isActivation]) {
+        self.lblServiceState.text = NSLocalizedString(@"您的帐号已经激活", nil);
+
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -203,9 +195,16 @@ NSInteger count = 2;
     return cell;
 }
 
+//判断号码是否激活
+- (BOOL)isActivation
+{
+    return [LLFileManage fileIsExist:@"config.xml"];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BOOL isActivati = YES;//[[NSUserDefaults standardUserDefaults] boolForKey:ACTIVATION_LOCALSTR];
+    BOOL isActivati = [self isActivation];
+    
     if (!isActivati) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"提示", nil) 
                                                         message:NSLocalizedString(@"请先激活", nil) 
@@ -230,7 +229,7 @@ NSInteger count = 2;
             case 1:
             {
                 CompanyInfoViewController *comInfoCtl = [[CompanyInfoViewController alloc] init];
-                comInfoCtl.strUrl = @"http://konka.mymyty.com";
+                comInfoCtl.strUrl = [XMLHelper getNodeStr:@"location" secondNode:@"send-url"];//@"konka.mymyty.com";
                 [self.navigationController pushViewController:comInfoCtl animated:YES];
                 [comInfoCtl release];
                 break;

@@ -14,15 +14,24 @@
 #import "LLFileManage.h"
 #import "PBEWithMD5AndDES.h"
 #import "ASIFormDataRequest.h"
+#import "XMLHelper.h"
+
+static NSString *strLatitude = @"";  //纬度
+static NSString *strLongitude= @"";  //经度
+static NSString *strAccuracy = @"";  //精确度
 
 @implementation AppDelegate
 
 @synthesize window = _window;
 @synthesize navigationController = _navigationController;
-@synthesize configTimeArr;
+@synthesize configTimeArr, gpsDateArr;
+@synthesize lm;
+
 
 - (void)dealloc
 {
+    [lm release];
+    [gpsDateArr release];
     [configTimeArr release];
     [_window release];
     [_navigationController release];
@@ -33,7 +42,8 @@
 {
     NSLog(@"000");
     //启动检查配置更新
-    [self checkUpConfig];
+    //[self checkUpConfig:YES];
+    NSLog(@"123 = %@", [XMLHelper getNodeStr:@"location" secondNode:@"send-url"]);
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
@@ -61,7 +71,7 @@
 {
     NSLog(@"接收定时通知代理");
     //启动检查配置更新
-    [self checkUpConfig];
+    [self checkUpConfig:YES];
 }
 
 //进入后台，设置定时
@@ -166,7 +176,7 @@
 
 #pragma mark- 检查配置文件更新
 //启动检查配置更新
-- (void)checkUpConfig
+- (void)checkUpConfig:(BOOL)isConfig
 {
     NSLog(@"启动检查配置更新");
     //判断配置文件是否已经下载
@@ -176,17 +186,27 @@
         NSLog(@"已经下载到本地");
         NSData *data = [LLFileManage ReadFromFile:fileName];
         //NSLog(@"data1==%@", data);
-        [self getHostStr:data];
+        if (isConfig) {
+            [self getConfigUpDate:data];
+        }else{
+            [self getGPSCondition:data];
+        }
+        
     }else{        
         NSData *data = [LLFileManage ReadLocalFile:@"config" FileType:@"xml"];
         //NSLog(@"data2==%@", data);
-        [self getHostStr:data];
+        if (isConfig) {
+            [self getConfigUpDate:data];
+        }else{
+            [self getGPSCondition:data];
+        }
+        
     }
 }
 
 
-//获得App当前版本号
-- (void)getHostStr:(NSData *)data
+//获得更新配置文件信息
+- (void)getConfigUpDate:(NSData *)data
 {
     NSAssert(data, @"Check update: local file is nil");
     
@@ -367,5 +387,177 @@
         }
     }
 }
+
+#pragma mark- 定时提交位置信息
+
+//获得是否提交位置信息条件
+- (void)getGPSCondition:(NSData *)data
+{
+    NSLog(@"获取是否提交位置信息条件");
+    NSAssert(data, @"GPS Condition: local data is nil");
+    
+    TBXML *tbxml = [TBXML tbxmlWithXMLData:data error:nil];
+    
+    TBXMLElement * root = tbxml.rootXMLElement;
+
+    NSString *strSendYear = @"";
+    NSString *strSendMonth = @"";
+    NSString *strSendTime = @"";  //时间段
+    NSString *strTimeInterval = @""; //时间间隔
+    NSString *strSendUrl = @"";
+    
+	if (root) {
+        TBXMLElement *location = [TBXML childElementNamed:@"location" parentElement:root];
+        if (location) {
+            //年份
+            TBXMLElement *sendYear = [TBXML childElementNamed:@"send-Year" parentElement:location];
+            if (sendYear) {
+                strSendYear = [TBXML textForElement:sendYear];
+                NSLog(@"sendYear = %@", strSendYear);
+            }
+            //月份
+            TBXMLElement *sendMonth = [TBXML childElementNamed:@"send-month" parentElement:location];
+            if (sendMonth) {
+                strSendMonth = [TBXML textForElement:sendMonth];
+                NSLog(@"sendMonth = %@", strSendMonth);
+            }
+            //日期,当日是否提交
+            TBXMLElement *sendDate = [TBXML childElementNamed:@"send-date" parentElement:location];
+            if (sendDate) {
+                NSString *strSendDate = [TBXML textForElement:sendDate];
+                NSLog(@"sendDate = %@",strSendDate);
+                
+                //截取字符串保存数组
+                NSArray *tmpArr = [[[NSArray alloc] init] autorelease];
+                tmpArr  = [strSendDate componentsSeparatedByString:@","];
+                NSLog(@"tmpArr = %@", tmpArr);
+                self.gpsDateArr = [NSArray arrayWithArray:tmpArr];
+                NSLog(@"self.gpsDateArr = %@", self.gpsDateArr);
+                
+            }
+            //提交时间
+            TBXMLElement *sendTime = [TBXML childElementNamed:@"send-time" parentElement:location];
+            if (sendTime) {
+                strSendTime = [TBXML textForElement:sendTime];
+                NSLog(@"sendTime = %@",strSendTime);
+            }
+            //提交时间间隔
+            TBXMLElement *timeInterval = [TBXML childElementNamed:@"time-interval" parentElement:location];
+            if (timeInterval) {
+                strTimeInterval = [TBXML textForElement:timeInterval];
+                NSLog(@"timeInterval = %@", strTimeInterval);
+            }
+            
+            //manual
+            TBXMLElement *manual = [TBXML childElementNamed:@"manual" parentElement:location];
+            if (manual) {
+                NSString *strManual = [TBXML textForElement:manual];
+                NSLog(@"manual = %@", strManual);
+            }
+            //send url
+            TBXMLElement *sendUrl = [TBXML childElementNamed:@"send-url" parentElement:location];
+            if (sendUrl) {
+                NSString *strSendUrl = [TBXML textForElement:sendUrl];
+                NSLog(@"sendUrl = %@", strSendUrl);
+            }
+            
+            //判断是否提交
+            BOOL isPostGPSInfo = [self isPostGPSInfo:strSendYear month:strSendMonth blDate:self.gpsDateArr];
+            if (isPostGPSInfo) {
+                NSLog(@"正式提交GPS信息!");
+            }
+            
+        }//location end!
+    }//root end!
+}
+
+//判断是否定时提交位置信息
+- (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth blDate:(NSArray *)dateArr
+{
+    //拼接时间
+    NSString *theDate = @"";
+    if ([strMonth length] == 1) {
+         theDate = [NSString stringWithFormat:@"%@-0%@", strYear, strMonth];
+    }else if ([strMonth length] == 2){
+         theDate = [NSString stringWithFormat:@"%@-%@", strYear, strMonth];
+    }
+    NSLog(@"theDate = %@", theDate);
+    //获取系统当前日期
+    NSString *nowDate = [UtilityClass getSystemTime:@"yy-MM"];
+    NSLog(@"nowDate = %@", nowDate);
+    
+    NSInteger intToday = [[UtilityClass getSystemTime:@"dd"] integerValue];
+    NSLog(@"intToday = %d", intToday);
+    
+    if ([nowDate isEqualToString:theDate] && [[dateArr objectAtIndex:intToday - 1] isEqualToString:@"1"]) {
+        return YES;
+    }
+    return NO;
+}
+
+//定时提交位置信息
+- (void)postGPSInfo
+{
+    NSLog(@"定时提交位置信息");
+    
+    //获取定位信息
+    CLLocationManager *_lm = [[CLLocationManager alloc] init];  
+    self.lm = _lm;
+    //是否开启定位服务
+    if ([self.lm locationServicesEnabled]) {  
+        self.lm.delegate = self;  
+        //精确度
+        self.lm.desiredAccuracy = kCLLocationAccuracyBest;
+        //指定设备必须移动多少距离位置信息才会更新，这个属性的单位是米,可以使用kCLDistanceFilterNone常量
+        self.lm.distanceFilter = 10.0f;
+        //启动位置管理器
+        [self.lm startUpdatingLocation];  
+    } 
+    [_lm release];
+}
+
+#pragma mark- 定位服务
+
+//获得一个新的定位值时
+- (void) locationManager: (CLLocationManager *) manager  
+     didUpdateToLocation: (CLLocation *) newLocation  
+            fromLocation: (CLLocation *) oldLocation{  
+    NSString *lat = [[NSString alloc] initWithFormat:@"%f",  
+                     newLocation.coordinate.latitude];  
+    //纬度
+    strLatitude = lat;  
+    
+    NSString *lng = [[NSString alloc] initWithFormat:@"%f",  
+                     newLocation.coordinate.longitude];
+    //经度
+    strLongitude = lng;  
+    
+    
+    //horizontalAccuracy属性可以指定精度范围，单位是米
+    NSString *acc = [[NSString alloc] initWithFormat:@"%f",  
+                     newLocation.horizontalAccuracy];  
+    strAccuracy = acc; //精确度     
+    
+    [acc release];  
+    [lat release];  
+    [lng release]; 
+    
+}  
+
+//位置管理器不能确定位置信息
+- (void) locationManager: (CLLocationManager *) manager  
+        didFailWithError: (NSError *) error {  
+    NSString *msg = [[NSString alloc]  
+                     initWithString:@"Error obtaining location"];  
+    UIAlertView *alert = [[UIAlertView alloc]  
+                          initWithTitle:@"Error"  
+                          message:msg  
+                          delegate:nil  
+                          cancelButtonTitle: @"Done"  
+                          otherButtonTitles:nil];  
+    [alert show];      
+    [msg release];  
+    [alert release];  
+}  
 
 @end
