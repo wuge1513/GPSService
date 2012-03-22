@@ -278,6 +278,8 @@ static const NSInteger LOCAL_RAND_MAX = 10;
             ];
 }
 
+#pragma mark- 定时通知
+
 /*!
  * 获取定时时间增量
  * @param strHour  小时字符串
@@ -327,6 +329,40 @@ static const NSInteger LOCAL_RAND_MAX = 10;
 	NSInteger hm = (hs * 3600 ) + (ms * 60) - nowSec;
     
     return hm;
+}
+
+/*!
+ * 设置闹铃
+ * @param timeInterval  时间增量
+ * @param strAlert  闹铃通知内容
+ */
+
++ (void)setAlarm:(NSInteger)timeInterval Alert:(NSString *)strAlert
+{
+    NSLog(@"1 = %d", timeInterval);
+    //[UIApplication sharedApplication].applicationIconBadgeNumber = 0;//应用程序右上角的数字=0（消失）   
+    //[[UIApplication sharedApplication] cancelAllLocalNotifications];//取消所有的通知  
+    
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    if (notification) 
+    {		
+        NSDate *now=[NSDate new];
+        notification.fireDate = [now dateByAddingTimeInterval:timeInterval];
+        notification.timeZone = [NSTimeZone defaultTimeZone];
+        //notification.repeatInterval = NSWeekCalendarUnit;//一周提示一次
+        notification.repeatInterval = kCFCalendarUnitDay; //每天一次kCFCalendarUnitDay  NSDayCalendarUnit
+        //notification.
+        notification.soundName = UILocalNotificationDefaultSoundName;
+        notification.alertBody = strAlert;
+        notification.applicationIconBadgeNumber++; 	
+        NSDictionary *userinfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [NSNumber numberWithInt: 123], @"test",nil];
+        notification.userInfo = userinfo;
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        
+    }
+    [notification release];
 }
 
 @end

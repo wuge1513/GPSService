@@ -15,6 +15,38 @@
 /*!
  * 获取配置文件单一节点
  * @param firstNode
+ */
++ (NSString *)getNodeStr:(NSString *)firstNode
+{
+    NSData *data;
+    //判断配置文件是否已经下载
+    NSString *fileName = @"config.xml";
+    BOOL fileIsExist = [LLFileManage fileIsExist:fileName];
+    if (fileIsExist) {
+        NSLog(@"已经下载到本地");
+        data = [LLFileManage ReadFromFile:fileName];
+    }else{        
+        data = [LLFileManage ReadLocalFile:@"config" FileType:@"xml"];
+    }
+    
+    
+    TBXML *tbxml = [TBXML tbxmlWithXMLData:data error:nil];
+    TBXMLElement * root = tbxml.rootXMLElement;
+    
+	if (root) {
+        TBXMLElement *tmpNode1 = [TBXML childElementNamed:firstNode parentElement:root];
+        if (tmpNode1) {
+                NSString *strResult = [TBXML textForElement:tmpNode1];
+                NSLog(@"strResult = %@", strResult);
+                return strResult;
+        }
+    }
+    return nil;
+}
+
+/*!
+ * 获取配置文件单一节点
+ * @param firstNode
  * @param secNode
  */
 + (NSString *)getNodeStr:(NSString *)firstNode secondNode:(NSString *)secNode

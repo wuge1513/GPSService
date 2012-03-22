@@ -79,7 +79,7 @@ NSInteger count = 2;
     self.lblServiceState.backgroundColor = [UIColor clearColor];
     //self.lblServiceState.textColor = [UIColor blueColor];
     self.lblServiceState.textAlignment = UITextAlignmentCenter;
-    [self.view addSubview:self.lblServiceState];
+    //[self.view addSubview:self.lblServiceState];
     [_lblServiceState release];
     
 
@@ -91,7 +91,6 @@ NSInteger count = 2;
     self.itemTableView.dataSource = self;
     [self.view addSubview:self.itemTableView];
     
-	
 }
 
 //激活按钮事件
@@ -203,7 +202,7 @@ NSInteger count = 2;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BOOL isActivati = [self isActivation];
+    BOOL isActivati = YES;//[self isActivation];
     
     if (!isActivati) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"提示", nil) 
@@ -229,7 +228,7 @@ NSInteger count = 2;
             case 1:
             {
                 CompanyInfoViewController *comInfoCtl = [[CompanyInfoViewController alloc] init];
-                comInfoCtl.strUrl = [XMLHelper getNodeStr:@"location" secondNode:@"send-url"];//@"konka.mymyty.com";
+                comInfoCtl.strUrl = [[NSUserDefaults standardUserDefaults] objectForKey:COMPANY_URL];//@"konka.mymyty.com";
                 [self.navigationController pushViewController:comInfoCtl animated:YES];
                 [comInfoCtl release];
                 break;

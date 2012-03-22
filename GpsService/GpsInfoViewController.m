@@ -13,6 +13,8 @@
 
 //ASIHttpRequest
 #import "ASIFormDataRequest.h"
+#import "XMLHelper.h"
+
 @implementation GpsInfoViewController
 @synthesize latitudeTextField, longitudeTextField, accuracyTextField;  
 @synthesize lm; 
@@ -110,7 +112,7 @@
 //确认
 - (void)actionConfirm
 {
-    NSString *no = self.tfPhoneNum.text;
+    NSString *no = [XMLHelper getNodeStr:@"mobile-no"];//self.tfPhoneNum.text;
     NSString *x = self.longitudeTextField.text; 
     NSString *y = self.latitudeTextField.text; 
     NSString *z = [UtilityClass getSystemTime:@"yyyy-MM-dd HH:mm:ss"];//@"2009-12-25 01:37:12";
@@ -245,19 +247,21 @@
     NSString *strResult;
     if ([resultCode isEqualToString:@"1"]) {
         strResult = @"上传成功！";
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" 
+                                                        message:strResult 
+                                                       delegate:self 
+                                              cancelButtonTitle:@"确定" 
+                                              otherButtonTitles:nil, nil];
+        
+        [alert show];
+        [alert release];
     }else{
         strResult = @"上传失败！";
     }
     
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" 
-//                                                    message:strResult 
-//                                                   delegate:self 
-//                                          cancelButtonTitle:@"确定" 
-//                                          otherButtonTitles:nil, nil];
-//    
-//    [alert show];
-//    [alert release];
-//    return;
+
+
 }
 
 #pragma mark-
@@ -267,19 +271,19 @@
 - (void) locationManager: (CLLocationManager *) manager  
      didUpdateToLocation: (CLLocation *) newLocation  
             fromLocation: (CLLocation *) oldLocation{  
-    NSString *lat = [[NSString alloc] initWithFormat:@"%f",  
+    NSString *lat = [[NSString alloc] initWithFormat:@"%g",  
                      newLocation.coordinate.latitude];  
     //纬度
     latitudeTextField.text = lat;  
     
-    NSString *lng = [[NSString alloc] initWithFormat:@"%f",  
+    NSString *lng = [[NSString alloc] initWithFormat:@"%g",  
                      newLocation.coordinate.longitude];
     //精度
     longitudeTextField.text = lng;  
     
     
     //horizontalAccuracy属性可以指定精度范围，单位是米
-    NSString *acc = [[NSString alloc] initWithFormat:@"%f",  
+    NSString *acc = [[NSString alloc] initWithFormat:@"%g",  
                      newLocation.horizontalAccuracy];  
     accuracyTextField.text = acc;      
     

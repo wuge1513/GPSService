@@ -285,9 +285,9 @@
         }
     }
     
-    NSString *no = self.tfPhoneNum.text;   //手机号码
+    NSString *no = @"18801167317";//self.tfPhoneNum.text;   //手机号码
     NSString *rx = COMPANY_NUM;//self.tfCompanyNum.text; //公司确认码 （短信通知，10个字符）
-    NSString *ry = self.tfPersonNum.text;  //个人确认码  (短信通知，10个字符）
+    NSString *ry = @"550c527f";//self.tfPersonNum.text;  //个人确认码  (短信通知，10个字符）
     NSString *rt = [UtilityClass getSystemTime:@"yyyy-MM-dd HH:mm:ss"];     //手机时间 （安全校验用）
     
     NSLog(@"加密前：no = %@", no);
@@ -417,9 +417,22 @@
                 //NSLog(@"=== strMsg = %@", strMsg);
             }
             
+            
+            
             //激活成功保存配置文件到本地
             if ([strCode isEqualToString:@"1"]) {
                 [LLFileManage WritteToFile:data FileName:@"config.xml"];
+                
+                //解析公司网址
+                TBXMLElement *companyUrl = [TBXML childElementNamed:@"company-info" parentElement:root];
+                if (companyUrl) {
+                    TBXMLElement *pageUrl = [TBXML childElementNamed:@"page-url" parentElement:companyUrl];
+                    if (pageUrl) {
+                        NSString *strUrl = [TBXML textForElement:pageUrl];
+                        //保存公司网址
+                        [[NSUserDefaults standardUserDefaults] setObject:strUrl forKey:COMPANY_URL];
+                    }
+                }
             }
             
             //返回结果提示

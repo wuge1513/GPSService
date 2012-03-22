@@ -43,7 +43,6 @@ static NSString *strAccuracy = @"";  //精确度
     NSLog(@"000");
     //启动检查配置更新
     //[self checkUpConfig:YES];
-    NSLog(@"123 = %@", [XMLHelper getNodeStr:@"location" secondNode:@"send-url"]);
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
@@ -90,10 +89,10 @@ static NSString *strAccuracy = @"";  //精确度
 //    NSInteger timeInterval = [UtilityClass getTimeInterval:[arr objectAtIndex:0] strMin:[arr objectAtIndex:1]];
 //    NSLog(@"%d", timeInterval);
     
-    NSInteger timeInterval = [UtilityClass getTimeInterval:@"18" strMin:@"43"];
-    
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;//应用程序右上角的数字=0（消失）   
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];//取消所有的通知  
+    NSInteger timeInterval = [UtilityClass getTimeInterval:@"12" strMin:@"34"];
+    NSLog(@"%d", timeInterval);
+    //[UIApplication sharedApplication].applicationIconBadgeNumber = 0;//应用程序右上角的数字=0（消失）   
+    //[[UIApplication sharedApplication] cancelAllLocalNotifications];//取消所有的通知  
     UILocalNotification *notification = [[UILocalNotification alloc] init];
 	if (notification) 
 	{		
@@ -104,9 +103,9 @@ static NSString *strAccuracy = @"";  //精确度
         notification.repeatInterval = kCFCalendarUnitDay; //每天一次kCFCalendarUnitDay  NSDayCalendarUnit
         //notification.
 		notification.soundName = UILocalNotificationDefaultSoundName;
-		notification.alertBody = @"hello,hello";
+		notification.alertBody = @"hello2,hello2";
         notification.applicationIconBadgeNumber = 1; 	
-        notification.alertAction = NSLocalizedString(@"test1", @"121"); 
+        notification.alertAction = NSLocalizedString(@"test2", @"122"); 
 		NSDictionary *userinfo = [NSDictionary dictionaryWithObjectsAndKeys:
 								  [NSNumber numberWithInt: 123], @"test",nil];
 		notification.userInfo = userinfo;
@@ -115,32 +114,6 @@ static NSString *strAccuracy = @"";  //精确度
 		
 	}
     [notification release];
-    
-    //----------------------
-    
-    NSInteger timeInterval2 = [UtilityClass getTimeInterval:@"18" strMin:@"44"];
-    
-    UILocalNotification *notification2 = [[UILocalNotification alloc] init];
-	if (notification2) 
-	{		
-		NSDate *now=[NSDate new];
-		notification.fireDate = [now dateByAddingTimeInterval:timeInterval2];
-		notification.timeZone = [NSTimeZone defaultTimeZone];
-        //notification.repeatInterval = NSWeekCalendarUnit;//一周提示一次
-        notification.repeatInterval = kCFCalendarUnitDay; //每天一次kCFCalendarUnitDay  NSDayCalendarUnit
-        //notification.
-		notification.soundName = UILocalNotificationDefaultSoundName;
-		notification.alertBody = @"hello2,hello2";
-        notification.applicationIconBadgeNumber = 1; 	
-        notification.alertAction = NSLocalizedString(@"test1", @"121"); 
-		NSDictionary *userinfo = [NSDictionary dictionaryWithObjectsAndKeys:
-								  [NSNumber numberWithInt: 123], @"test",nil];
-		notification.userInfo = userinfo;
-        
-		[[UIApplication sharedApplication] scheduleLocalNotification:notification];
-		
-	}
-    [notification2 release];
     
 }
 

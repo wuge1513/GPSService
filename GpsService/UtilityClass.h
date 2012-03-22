@@ -93,4 +93,12 @@
  */
 + (NSInteger)getTimeInterval:(NSString *)strHour strMin:(NSString *)strMinute;
 
+/*!
+ * 设置闹铃
+ * @param timeInterval  时间增量
+ * @param strAlert  闹铃通知内容
+ */
+
++ (void)setAlarm:(NSInteger)timeInterval Alert:(NSString *)strAlert;
+
 @end

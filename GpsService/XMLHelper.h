@@ -10,6 +10,13 @@
 
 @interface XMLHelper : NSObject
 
+
+/*!
+ * 获取配置文件单一节点
+ * @param firstNode
+ */
++ (NSString *)getNodeStr:(NSString *)firstNode;
+
 /*!
  * 获取配置文件单一节点
  * @param firstNode
