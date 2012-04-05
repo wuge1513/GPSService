@@ -74,7 +74,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     //手机号标签
     UILabel *_lblPhoneNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 100.0, 30.0)];
@@ -345,7 +345,7 @@
     NSString *_idc= [NSString stringWithFormat:@"%d%@", arr[3], crc];
     NSLog(@"_idc = %@", _idc);
     
-    NSURL *url = [NSURL URLWithString:self.strHost];//@"http://konka.mymyty.com/GPSConfig.do"
+    NSURL *url = [NSURL URLWithString:self.strHost];
     NSLog(@"url = %@", url);
     
     ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
@@ -387,14 +387,22 @@
 #endif
 
 }
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    NSLog(@"===%@", request.responseStatusMessage);
+}
 
 - (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
 {
     
     NSAssert(data, @"Activate request: receive data is nil.");
     
+    
     NSLog(@"----xml = %@", [UtilityClass DataToUTF8String:data]);
     
+
+    return;
+
     TBXML *tbxml = [TBXML tbxmlWithXMLData:data error:nil];
     
     TBXMLElement * root = tbxml.rootXMLElement;
@@ -417,11 +425,11 @@
                 //NSLog(@"=== strMsg = %@", strMsg);
             }
             
-            
-            
             //激活成功保存配置文件到本地
-            if ([strCode isEqualToString:@"1"]) {
-                [LLFileManage WritteToFile:data FileName:@"config.xml"];
+            if ([strCode isEqualToString:@"0"]) {
+                
+                //配置文件保存到本地沙盒
+                //[LLFileManage WritteToFile:data FileName:@"config.xml"];
                 
                 //解析公司网址
                 TBXMLElement *companyUrl = [TBXML childElementNamed:@"company-info" parentElement:root];
@@ -431,6 +439,29 @@
                         NSString *strUrl = [TBXML textForElement:pageUrl];
                         //保存公司网址
                         [[NSUserDefaults standardUserDefaults] setObject:strUrl forKey:COMPANY_URL];
+                    }
+                }
+                
+                //获取配置文件信息
+                TBXMLElement *config_update = [TBXML childElementNamed:@"config-update" parentElement:root];
+                if (config_update) {
+                    //配置文件版本号
+                    //配置文件更新地址
+                    //配置文件更新时间
+                    TBXMLElement *time = [TBXML childElementNamed:@"time" parentElement:config_update];
+                    if (time) {
+                        NSString *strTime = [TBXML textForElement:time];
+                        NSLog(@"strTime = %@", strTime);
+                        
+                        NSArray *arr = [[[NSArray alloc] init] autorelease]; 
+                        arr = [strTime componentsSeparatedByString:@","];
+                        NSLog(@"arr = %@", arr);
+                        
+                        //定时更新配置文件
+                        for (NSInteger i = 0; i < [arr count]; i++) {
+                             NSInteger timeInterval = [UtilityClass getTimeInterval:[arr objectAtIndex:i]];
+                            [UtilityClass setAlarm:timeInterval Alert:@"更新配置文件"];
+                        }
                     }
                 }
             }

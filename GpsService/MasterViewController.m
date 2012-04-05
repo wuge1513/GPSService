@@ -9,11 +9,12 @@
 #import "MasterViewController.h"
 #import "ActivateViewController.h"
 #import "GpsInfoViewController.h"
-
 #import "CompanyInfoViewController.h"
+
 #import "Config.h"
 #import "LLFileManage.h"
 #import "XMLHelper.h"
+#import "UtilityClass.h"
 
 
 NSInteger count = 2;
@@ -70,14 +71,14 @@ NSInteger count = 2;
     // Do any additional setup after loading the view, typically from a nib.
     
     //背景颜色
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     //激活状态提示标签
     UILabel *_lblServiceState = [[UILabel alloc] initWithFrame:CGRectMake(40.0, 20.0, 240.0, 40.0)];
     self.lblServiceState = _lblServiceState;
     self.lblServiceState.text = NSLocalizedString(@"您的帐号尚未激活", nil);
     self.lblServiceState.backgroundColor = [UIColor clearColor];
-    //self.lblServiceState.textColor = [UIColor blueColor];
+    self.lblServiceState.textColor = [UIColor blackColor];
     self.lblServiceState.textAlignment = UITextAlignmentCenter;
     //[self.view addSubview:self.lblServiceState];
     [_lblServiceState release];
@@ -93,14 +94,61 @@ NSInteger count = 2;
     
 }
 
+
+
 //激活按钮事件
 - (void)actionActivate{
     NSLog(@"123");
     
-    if (!self.activateViewController) {
-        self.activateViewController = [[[ActivateViewController alloc] initWithNibName:@"ActivateViewController" bundle:nil] autorelease];
+//    NSString *strTime = [XMLHelper getNodeStr:@"config-update" secondNode:@"time"];
+//    NSLog(@"strTime = %@", strTime);
+//    
+//    NSArray *arr = [[[NSArray alloc] init] autorelease]; 
+//    arr = [strTime componentsSeparatedByString:@","];
+//    NSLog(@"arr = %@", arr);
+//    
+//    //定时更新配置文件
+//    for (NSInteger i = 0; i < [arr count]; i++) {
+//        NSInteger timeInterval = [UtilityClass getTimeInterval:[arr objectAtIndex:i]];
+//        [UtilityClass setAlarm:timeInterval Alert:@"更新配置文件"];
+//    }
+    
+    NSString *strSendTime = [XMLHelper getNodeStr:@"location" secondNode:@"send-time"];
+    NSLog(@"strSendTime = %@", strSendTime);
+    
+    NSString *strInterval = [XMLHelper getNodeStr:@"location" secondNode:@"time_interval"];
+    NSLog(@"strInterval = %@", strInterval);
+    
+    
+    NSArray *arrSendTime = [[[NSArray alloc] init]  autorelease];
+    arrSendTime = [strSendTime componentsSeparatedByString:@"--"];
+    NSLog(@"========arrSendTime = %@", arrSendTime);
+    
+    NSInteger intStartTime = [UtilityClass getTimeInterval:[arrSendTime objectAtIndex:0]];
+    NSLog(@"=== intStartTime = %d", intStartTime);
+    NSInteger intEndTime = [UtilityClass getTimeInterval:[arrSendTime objectAtIndex:1]];
+    NSLog(@"=== intEndTime = %d", intEndTime);
+    
+    NSInteger intSumTime = intEndTime - intStartTime > 0 ? (intEndTime - intStartTime) : (intEndTime + intStartTime);
+    NSLog(@"==== intSumTime = %d", intSumTime);
+    
+    NSInteger count = intSumTime / [strInterval integerValue];
+    NSLog(@"count = %d", count);
+    
+    NSInteger c = [UtilityClass getTimeInterval:[arrSendTime objectAtIndex:0]];
+    NSLog(@"=== c = %d", c);
+    
+    for (int i = 0; i <= count; i++) {
+        
+        [UtilityClass setAlarm:c Alert:@"提交位置信息"];
+        c += [strInterval integerValue];
     }
-    [self.navigationController pushViewController:self.activateViewController animated:YES];
+    
+    
+//    if (!self.activateViewController) {
+//        self.activateViewController = [[[ActivateViewController alloc] initWithNibName:@"ActivateViewController" bundle:nil] autorelease];
+//    }
+//    [self.navigationController pushViewController:self.activateViewController animated:YES];
 }
 
 #pragma mark-
@@ -164,7 +212,7 @@ NSInteger count = 2;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return count;
+    return 2;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -184,6 +232,11 @@ NSInteger count = 2;
     }
 
     cell.textLabel.textAlignment = UITextAlignmentCenter;
+    
+    //cell 背景
+    //cell.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_bg.png"]] autorelease];
+    //cell.backgroundColor = [UIColor clearColor];
+    
     // Configure the cell.
     if (indexPath.row == 0) {
         cell.textLabel.text = NSLocalizedString(@"获取GPS信息", nil);

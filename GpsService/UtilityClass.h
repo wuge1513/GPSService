@@ -87,6 +87,13 @@
 
 /*!
  * 获取定时时间增量
+ * @param strHour  时间  HH:mm
+ * @return 定时时间与系统时间增量
+ */
++ (NSInteger)getTimeInterval:(NSString *)strTime;
+
+/*!
+ * 获取定时时间增量
  * @param strHour  小时字符串
  * @param strHour  分钟字符串
  * @return 定时时间与系统时间增量
@@ -101,4 +108,10 @@
 
 + (void)setAlarm:(NSInteger)timeInterval Alert:(NSString *)strAlert;
 
+
+//判断是否定时提交位置信息
++ (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth blDate:(NSArray *)dateArr;
+
+//判断是否定时提交位置信息
++ (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth strDate:(NSString *)strDate;
 @end

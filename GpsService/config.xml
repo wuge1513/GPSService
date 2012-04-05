@@ -15,9 +15,9 @@
     
 	<config-update>
         <cx>0a4a174c</cx>
-        <cy>1.2</cy>
+        <cy>1.1</cy>
         <config-update-url>http://konka.mymyty.com/GPSConfig.do</config-update-url>
-        <time>8:30,13:30</time>
+        <time>10:50,11:50</time><!--8:30,13:30-->
     </config-update>
     
 	<soft-update>
@@ -28,10 +28,10 @@
     
     <location>
         <send-year>2012</send-year>
-        <send-month>3</send-month>
-        <send-date>1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0</send-date>
-        <send-time>08:00:00--12:00:00</send-time>
-        <time_interval>600</time_interval>
+        <send-month>4</send-month>
+        <send-date>1,1,0,0,1,1,0,0,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0</send-date>
+        <send-time>14:05:00--14:10:00</send-time>
+        <time_interval>60</time_interval>
         <manual>true</manual>
         <send-url>http://konka.mymyty.com/GPSBack.do</send-url>
     </location>

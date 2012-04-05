@@ -30,6 +30,9 @@
 //定时提交位置信息
 - (void)postGPSInfo;
 
+//获取当前位置信息
+- (void)getGPSInfo;
+
 //判断是否定时提交位置信息
 - (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth blDate:(NSArray *)dateArr;
 

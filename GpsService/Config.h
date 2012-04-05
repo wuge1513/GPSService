@@ -11,7 +11,7 @@
 
 
 //开启本地解密校验
-#define LL_DEBUG
+//#define LL_DEBUG
 
 //公司网址
 #define COMPANY_URL     @"COMPANY_URL"

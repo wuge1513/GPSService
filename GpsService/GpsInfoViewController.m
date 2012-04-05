@@ -68,7 +68,7 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     //获取定位信息
     CLLocationManager *_lm = [[CLLocationManager alloc] init];  
@@ -79,13 +79,14 @@
         //精确度
         self.lm.desiredAccuracy = kCLLocationAccuracyBest;
         //指定设备必须移动多少距离位置信息才会更新，这个属性的单位是米,可以使用kCLDistanceFilterNone常量
-        self.lm.distanceFilter = 10.0f;
+        self.lm.distanceFilter = 100.0f;
         //启动位置管理器
         [self.lm startUpdatingLocation];  
     } 
     [_lm release];
     
-
+    self.tfPhoneNum.text = [XMLHelper getNodeStr:@"mobile-no"];
+    self.tfLocationTime.text = [UtilityClass getSystemTime:@"yyyy-MM-dd HH:mm:ss"];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -259,9 +260,6 @@
     }else{
         strResult = @"上传失败！";
     }
-    
-
-
 }
 
 #pragma mark-

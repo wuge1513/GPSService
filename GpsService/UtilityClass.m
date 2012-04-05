@@ -9,6 +9,7 @@
 #import "UtilityClass.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "NSData+CRC32.h"
+#import "XMLHelper.h"
 
 @implementation UtilityClass
 
@@ -280,6 +281,20 @@ static const NSInteger LOCAL_RAND_MAX = 10;
 
 #pragma mark- 定时通知
 
+
+/*!
+ * 获取定时时间增量
+ * @param strHour  时间  HH:mm
+ * @return 定时时间与系统时间增量
+ */
++ (NSInteger)getTimeInterval:(NSString *)strTime
+{
+    NSArray *arr = [[[NSArray alloc] init] autorelease];
+    arr = [strTime componentsSeparatedByString:@":"];
+
+    return [self getTimeInterval:[arr objectAtIndex:0] strMin:[arr objectAtIndex:1]];
+}
+
 /*!
  * 获取定时时间增量
  * @param strHour  小时字符串
@@ -337,9 +352,9 @@ static const NSInteger LOCAL_RAND_MAX = 10;
  * @param strAlert  闹铃通知内容
  */
 
-+ (void)setAlarm:(NSInteger)timeInterval Alert:(NSString *)strAlert
++ (void)setAlarm:(NSInteger)timeInterval Alert:(NSString *)strAlert 
 {
-    NSLog(@"1 = %d", timeInterval);
+   // NSLog(@"1 = %d", timeInterval);
     //[UIApplication sharedApplication].applicationIconBadgeNumber = 0;//应用程序右上角的数字=0（消失）   
     //[[UIApplication sharedApplication] cancelAllLocalNotifications];//取消所有的通知  
     
@@ -351,7 +366,7 @@ static const NSInteger LOCAL_RAND_MAX = 10;
         notification.timeZone = [NSTimeZone defaultTimeZone];
         //notification.repeatInterval = NSWeekCalendarUnit;//一周提示一次
         notification.repeatInterval = kCFCalendarUnitDay; //每天一次kCFCalendarUnitDay  NSDayCalendarUnit
-        //notification.
+
         notification.soundName = UILocalNotificationDefaultSoundName;
         notification.alertBody = strAlert;
         notification.applicationIconBadgeNumber++; 	
@@ -359,10 +374,78 @@ static const NSInteger LOCAL_RAND_MAX = 10;
                                   [NSNumber numberWithInt: 123], @"test",nil];
         notification.userInfo = userinfo;
         
-        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        //NSString *strSendYear = @"2012";//= [XMLHelper getNodeStr:<#(NSString *)#> secondNode:<#(NSString *)#>];
+        //NSString *strSendMonth = @"4";
         
+        NSString *strSendDate = [XMLHelper getNodeStr:@"location" secondNode:@"send-date"];
+
+        //截取字符串保存数组
+        NSArray *tmpArr = [[[NSArray alloc] init] autorelease];
+        tmpArr  = [strSendDate componentsSeparatedByString:@","];
+        NSLog(@"tmpArr = %@", tmpArr);
+        
+        //BOOL isPostGPSInfo = NO;
+        for (int i = 0; i < [tmpArr count]; i++) {
+            //isPostGPSInfo = [self isPostGPSInfo:strSendYear month:strSendMonth strDate:[tmpArr objectAtIndex:i]];
+            if ([[tmpArr objectAtIndex:i] isEqualToString:@"1"]) {
+                NSLog(@"===date = %d", i + 1);
+                timeInterval += 24*60*60;
+                 notification.fireDate = [now dateByAddingTimeInterval:timeInterval];
+                [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+            }
+            
+        }
+
     }
     [notification release];
+}
+
+//判断是否定时提交位置信息
++ (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth strDate:(NSString *)strDate
+{
+    //拼接时间
+    NSString *theDate = @"";
+    if ([strMonth length] == 1) {
+        theDate = [NSString stringWithFormat:@"%@-0%@", strYear, strMonth];
+    }else if ([strMonth length] == 2){
+        theDate = [NSString stringWithFormat:@"%@-%@", strYear, strMonth];
+    }
+    NSLog(@"theDate = %@", theDate);
+    //获取系统当前日期
+    NSString *nowDate = [UtilityClass getSystemTime:@"yyyy-MM"];
+    NSLog(@"nowDate = %@", nowDate);
+    
+    NSInteger intToday = [[UtilityClass getSystemTime:@"dd"] integerValue];
+    NSLog(@"intToday = %d", intToday);
+    
+    if ([nowDate isEqualToString:theDate] && [strDate isEqualToString:@"1"]) {
+        return YES;
+    }
+    return NO;
+}
+
+//判断是否定时提交位置信息
++ (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth blDate:(NSArray *)dateArr
+{
+    //拼接时间
+    NSString *theDate = @"";
+    if ([strMonth length] == 1) {
+        theDate = [NSString stringWithFormat:@"%@-0%@", strYear, strMonth];
+    }else if ([strMonth length] == 2){
+        theDate = [NSString stringWithFormat:@"%@-%@", strYear, strMonth];
+    }
+    NSLog(@"theDate = %@", theDate);
+    //获取系统当前日期
+    NSString *nowDate = [UtilityClass getSystemTime:@"yyyy-MM"];
+    NSLog(@"nowDate = %@", nowDate);
+    
+    NSInteger intToday = [[UtilityClass getSystemTime:@"dd"] integerValue];
+    NSLog(@"intToday = %d", intToday);
+    
+    if ([nowDate isEqualToString:theDate] && [[dateArr objectAtIndex:intToday - 1] isEqualToString:@"1"]) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

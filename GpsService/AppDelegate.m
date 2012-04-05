@@ -41,7 +41,8 @@ static NSString *strAccuracy = @"";  //精确度
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSLog(@"000");
-    //启动检查配置更新
+    
+    //程序启动检查配置更新
     //[self checkUpConfig:YES];
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
@@ -70,7 +71,13 @@ static NSString *strAccuracy = @"";  //精确度
 {
     NSLog(@"接收定时通知代理");
     //启动检查配置更新
-    [self checkUpConfig:YES];
+    //[self checkUpConfig:YES];
+    
+    NSURL *url = [NSURL URLWithString:@"http://www.baidu.com"];
+    [[UIApplication sharedApplication] openURL:url];
+    
+    //判断是否提交位置信息, 提交位置信息
+    //[self checkUpConfig:NO];
 }
 
 //进入后台，设置定时
@@ -81,39 +88,10 @@ static NSString *strAccuracy = @"";  //精确度
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
+//    NSInteger timeInterval = [UtilityClass getTimeInterval:@"17" strMin:@"15"];
+//    [UtilityClass setAlarm:timeInterval Alert:@"你好！"];
     
-    
-//    NSArray *arr = [[self.configTimeArr objectAtIndex:0] componentsSeparatedByString:@":"];
-//
-//    //获取定时增量
-//    NSInteger timeInterval = [UtilityClass getTimeInterval:[arr objectAtIndex:0] strMin:[arr objectAtIndex:1]];
-//    NSLog(@"%d", timeInterval);
-    
-    NSInteger timeInterval = [UtilityClass getTimeInterval:@"12" strMin:@"34"];
-    NSLog(@"%d", timeInterval);
-    //[UIApplication sharedApplication].applicationIconBadgeNumber = 0;//应用程序右上角的数字=0（消失）   
-    //[[UIApplication sharedApplication] cancelAllLocalNotifications];//取消所有的通知  
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-	if (notification) 
-	{		
-		NSDate *now=[NSDate new];
-		notification.fireDate = [now dateByAddingTimeInterval:timeInterval];
-		notification.timeZone = [NSTimeZone defaultTimeZone];
-        //notification.repeatInterval = NSWeekCalendarUnit;//一周提示一次
-        notification.repeatInterval = kCFCalendarUnitDay; //每天一次kCFCalendarUnitDay  NSDayCalendarUnit
-        //notification.
-		notification.soundName = UILocalNotificationDefaultSoundName;
-		notification.alertBody = @"hello2,hello2";
-        notification.applicationIconBadgeNumber = 1; 	
-        notification.alertAction = NSLocalizedString(@"test2", @"122"); 
-		NSDictionary *userinfo = [NSDictionary dictionaryWithObjectsAndKeys:
-								  [NSNumber numberWithInt: 123], @"test",nil];
-		notification.userInfo = userinfo;
-        
-		[[UIApplication sharedApplication] scheduleLocalNotification:notification];
-		
-	}
-    [notification release];
+
     
 }
 
@@ -165,7 +143,8 @@ static NSString *strAccuracy = @"";  //精确度
             [self getGPSCondition:data];
         }
         
-    }else{        
+    }
+    else{        
         NSData *data = [LLFileManage ReadLocalFile:@"config" FileType:@"xml"];
         //NSLog(@"data2==%@", data);
         if (isConfig) {
@@ -173,7 +152,6 @@ static NSString *strAccuracy = @"";  //精确度
         }else{
             [self getGPSCondition:data];
         }
-        
     }
 }
 
@@ -229,11 +207,15 @@ static NSString *strAccuracy = @"";  //精确度
             }
             
             
-            
-            NSString *no = @"18801167317";   //手机号码
+            NSString *no = [XMLHelper getNodeStr:@"mobile-no"];//手机号码
             NSString *cx = strCX;
             NSString *cy = strVersion;
             NSString *ct = [UtilityClass getSystemTime:@"yyyy-MM-dd HH:mm:ss"];     //手机时间 （安全校验用）
+            
+            
+            NSString *_no = [PBEWithMD5AndDES encrypt:no password:nil];
+            NSString *_cx = [PBEWithMD5AndDES encrypt:cx password:nil];
+            NSString *_cy = [PBEWithMD5AndDES encrypt:cy password:nil];
             
             // 获取0-9之间4个不重复的随机数的数组  对象
             NSMutableArray *arans = [[[NSMutableArray alloc] initWithCapacity:4] autorelease];
@@ -260,12 +242,9 @@ static NSString *strAccuracy = @"";  //精确度
             NSLog(@"序列化随机数：%d  %d  %d  %d", brr[0], brr[1], brr[2], brr[3]);
             NSLog(@"-----------------------");
             
-            NSString *crc = [UtilityClass getVertifyCode:no encryptLongitude:cx encryptLatitude:cy systemTime:ct tranArray:transArr];
+            NSString *crc = [UtilityClass getVertifyCode:_no encryptLongitude:_cx encryptLatitude:_cy systemTime:ct tranArray:transArr];
             NSLog(@"随机序列生成校验码crc = %@", crc);
-            
-            NSString *_no = [PBEWithMD5AndDES encrypt:no password:nil];
-            NSString *_cx = [PBEWithMD5AndDES encrypt:cx password:nil];
-            NSString *_cy = [PBEWithMD5AndDES encrypt:cy password:nil];
+        
             
             NSString *_ct = [NSString stringWithFormat:@"%@.%d%d%d", ct, arr[0], arr[1], arr[2]];
             NSLog(@"_rt = %@", _ct);
@@ -280,7 +259,6 @@ static NSString *strAccuracy = @"";  //精确度
             ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
             request.delegate = self;
             [request setRequestMethod:@"POST"];
-            
             [request setAllowCompressedResponse:NO];
             
             [request setPostValue: _no forKey:@"no"];
@@ -294,17 +272,6 @@ static NSString *strAccuracy = @"";  //精确度
             
         }
     }
-}
-- (void)requestFinished:(ASIHTTPRequest *)request
-{
-    NSLog(@"123");
-    NSLog(@"----- 1 = %d", request.responseStatusCode);
-    
-    NSLog(@"----- 2 = %@", request.responseData);
-    
-    NSLog(@"----- 3 = %@", request.responseString);
-    
-    NSLog(@"----- 4 = %@", request.responseStatusMessage);
 }
 
 - (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
@@ -321,42 +288,31 @@ static NSString *strAccuracy = @"";  //精确度
 	
 	if (root) {
         
-        NSString *strCX = @"";
-        NSString *strCY = @"";
-        NSString *strUrl = @"";
-        NSString *strTime = @"";
+        NSString *strReturnCode = @"";
+        NSString *strMsg = @"";
         
-		TBXMLElement *config_update = [TBXML childElementNamed:@"config-update" parentElement:root];
-        if (config_update) {
+		TBXMLElement *return_info = [TBXML childElementNamed:@"return-info" parentElement:root];
+        if (return_info) {
             
-            TBXMLElement *cx = [TBXML childElementNamed:@"cx" parentElement:config_update];
-            if (cx) {
-                strCX = [TBXML textForElement:cx];
-                NSLog(@"=== strCX = %@", strCX);
+            TBXMLElement *return_code = [TBXML childElementNamed:@"return-code" parentElement:return_info];
+            if (return_code) {
+                strReturnCode = [TBXML textForElement:return_code];
+                NSLog(@"=== strReturnCode = %@", strReturnCode);
             }
             
-            //配置文件版本号
-            TBXMLElement *cy = [TBXML childElementNamed:@"cy" parentElement:config_update];
-            if (cy) {
-                strCY = [TBXML textForElement:cy];
-                NSLog(@"=== strCY = %@", cy);
+            TBXMLElement *msg = [TBXML childElementNamed:@"msg" parentElement:return_info];
+            if (msg) {
+                strMsg = [TBXML textForElement:msg];
+                NSLog(@"=== strMsg = %@", strMsg);
             }
-            
-            //配置文件更新地址
-            TBXMLElement *configUrl = [TBXML childElementNamed:@"config-update-url" parentElement:config_update];
-            if (configUrl) {
-                strUrl = [TBXML textForElement:configUrl];
-                NSLog(@"=== strURL = %@", strUrl);
+            if ([strReturnCode isEqualToString:@"1"]) {
+                NSLog(@"%@", strMsg);
+                //配置文件更新到本地沙盒
+                [LLFileManage WritteToFile:data FileName:@"config.xml"];
+            }else{
+                NSLog(@"%@", strMsg);
             }
-            
-            //配置文件更新时间
-            TBXMLElement *configTime = [TBXML childElementNamed:@"time" parentElement:config_update];
-            if (configTime) {
-                strTime = [TBXML textForElement:configTime];
-                NSLog(@"=== strTime = %@", strTime);
-            }
-            //配置文件更新到本地沙盒
-            [LLFileManage WritteToFile:data FileName:@"config.xml"];
+
         }
     }
 }
@@ -438,10 +394,134 @@ static NSString *strAccuracy = @"";  //精确度
             BOOL isPostGPSInfo = [self isPostGPSInfo:strSendYear month:strSendMonth blDate:self.gpsDateArr];
             if (isPostGPSInfo) {
                 NSLog(@"正式提交GPS信息!");
+                
+                NSURL *url = [NSURL URLWithString:@"http://www.baidu.com"];
+                [[UIApplication sharedApplication] openURL:url];
             }
             
         }//location end!
     }//root end!
+}
+
+- (void)postGPSInfo
+{
+    NSString *no = [XMLHelper getNodeStr:@"mobile-no"];//self.tfPhoneNum.text;
+    NSString *x = strLongitude; 
+    NSString *y = strLatitude;
+    NSString *z = [UtilityClass getSystemTime:@"yyyy-MM-dd HH:mm:ss"];//@"2009-12-25 01:37:12";
+    
+    NSLog(@"加密前：no = %@", no);
+    NSLog(@"加密前：x = %@", x);
+    NSLog(@"加密前：y = %@", y);
+    NSLog(@"手机发送时间：z = %@", z);
+    NSLog(@"------------------------");
+    
+    //数据加密
+    NSString *_no = [PBEWithMD5AndDES encrypt:no password:nil];
+    NSString *_x = [PBEWithMD5AndDES encrypt:x password:nil];
+    NSString *_y = [PBEWithMD5AndDES encrypt:y password:nil];
+    
+    NSLog(@"加密后：_no = %@", _no);
+    NSLog(@"加密后：_x = %@", _x);
+    NSLog(@"加密后：_y = %@", _y);
+    NSLog(@"手机发送时间：z = %@", z);
+    NSLog(@"------------------------");  
+    
+    // 获取0-9之间4个不重复的随机数的数组  对象
+    NSMutableArray *arans = [[[NSMutableArray alloc] initWithCapacity:4] autorelease]; 
+    
+    arans = [UtilityClass getRandArray:4];
+    
+    NSInteger arr[4];
+    
+    for (int i = 0; i < 4; i++) {
+        //arr[i] = [UtilityClass getRandArray:4];
+        //[arans addObject:[NSNumber numberWithInteger:arr[i]]];
+        //NSNumber *num = [arans objectAtIndex:i];
+        arr[i] = [[arans objectAtIndex:i] integerValue];
+    }
+    
+    //随机数组序列化
+    NSMutableArray *transArr = [[[NSMutableArray alloc] initWithCapacity:4] autorelease]; 
+    
+    transArr = [UtilityClass transArray:arans];
+    
+    
+    //用于打印测试
+    NSInteger brr[4];
+    for (NSInteger i = 0; i < [transArr count]; i++) {
+        brr[i] = [[transArr objectAtIndex:i] integerValue];
+    }
+    
+    NSLog(@"随机数：%d  %d  %d  %d", arr[0], arr[1], arr[2], arr[3]);
+    NSLog(@"序列化随机数：%d  %d  %d  %d", brr[0], brr[1], brr[2], brr[3]);
+    NSLog(@"-----------------------");
+    
+    
+    // 根据随机序列生成校验码
+    NSString *crc = [UtilityClass getVertifyCode:_no encryptLongitude:_x encryptLatitude:_y systemTime:z tranArray:transArr];
+    NSLog(@"随机序列生成校验码crc = %@", crc);
+    
+    //    // 手机发送的数据相当于以下
+    //    NSString *postStr = [NSString stringWithFormat:@"no=%@&x=%@&y=%@&z=%@.%d%d%d&idc=%d%@", _no, _x, _y, z, arr[0], arr[1], arr[2], arr[3], crc];
+    //    NSLog(@"手机发送信息：%@", postStr);
+    //    NSLog(@"----------------------");
+    
+    
+    /*!
+     * 提交http请求
+     */
+    NSString *t_no = _no;
+    NSString *t_x = _x;
+    NSString *t_y = _y;
+    NSString *t_z = [NSString stringWithFormat:@"%@.%d%d%d", z, arr[0], arr[1], arr[2]];
+    NSString *t_idc = [NSString stringWithFormat:@"%d%@", arr[3], crc];
+    
+    
+    NSURL *url = [NSURL URLWithString:@"http://konka.mymyty.com/GPSBack.do"];
+    NSLog(@"url = %@", url);
+    
+    ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
+    [request setRequestMethod:@"POST"];
+    request.delegate = self;
+    [request setAllowCompressedResponse:NO];
+    
+    [request setPostValue: t_no forKey:@"no"];
+    [request setPostValue:t_x forKey:@"x"];
+    [request setPostValue:t_y forKey:@"y"];
+    [request setPostValue:t_z forKey:@"z"];
+    [request setPostValue:t_idc forKey:@"idc"];
+    [request setTimeOutSeconds:1000];
+    [request startAsynchronous]; //异步执行
+    [request release];
+    
+    /*!
+     * 解密过程 测试加密算法
+     */ 
+#ifdef LL_DEBUG
+    
+    
+    
+    // 1.核对校验码
+    if ([UtilityClass checkVerifyCode:t_no encryptLongitude:t_x encryptLatitude:t_y systemTime:t_z idcStr:t_idc]) {
+        // 2.解密数据
+        NSLog(@"通过校验！");
+        
+        NSString *str1 = [PBEWithMD5AndDES decrypt:t_no password:nil];
+        NSString *str2 = [PBEWithMD5AndDES decrypt:t_x password:nil];
+        NSString *str3 = [PBEWithMD5AndDES decrypt:t_y password:nil];
+        
+        NSLog(@"===str1 = %@", str1);
+        NSLog(@"===str2 = %@", str2);
+        NSLog(@"===str3 = %@", str3);
+        
+        
+    } else {
+        // 违法数据拒绝处理
+        NSLog(@"没有通过校验！");
+    }
+#endif
+    
 }
 
 //判断是否定时提交位置信息
@@ -469,7 +549,7 @@ static NSString *strAccuracy = @"";  //精确度
 }
 
 //定时提交位置信息
-- (void)postGPSInfo
+- (void)getGPSInfo
 {
     NSLog(@"定时提交位置信息");
     
@@ -495,41 +575,34 @@ static NSString *strAccuracy = @"";  //精确度
 - (void) locationManager: (CLLocationManager *) manager  
      didUpdateToLocation: (CLLocation *) newLocation  
             fromLocation: (CLLocation *) oldLocation{  
-    NSString *lat = [[NSString alloc] initWithFormat:@"%f",  
+    NSString *lat = [NSString stringWithFormat:@"%f",  
                      newLocation.coordinate.latitude];  
     //纬度
     strLatitude = lat;  
     
-    NSString *lng = [[NSString alloc] initWithFormat:@"%f",  
+    NSString *lng = [NSString stringWithFormat:@"%f",  
                      newLocation.coordinate.longitude];
     //经度
     strLongitude = lng;  
     
     
     //horizontalAccuracy属性可以指定精度范围，单位是米
-    NSString *acc = [[NSString alloc] initWithFormat:@"%f",  
+    NSString *acc = [NSString stringWithFormat:@"%f",  
                      newLocation.horizontalAccuracy];  
     strAccuracy = acc; //精确度     
-    
-    [acc release];  
-    [lat release];  
-    [lng release]; 
-    
 }  
 
 //位置管理器不能确定位置信息
 - (void) locationManager: (CLLocationManager *) manager  
         didFailWithError: (NSError *) error {  
-    NSString *msg = [[NSString alloc]  
-                     initWithString:@"Error obtaining location"];  
+    NSString *msg = @"Error obtaining location";  
     UIAlertView *alert = [[UIAlertView alloc]  
                           initWithTitle:@"Error"  
                           message:msg  
                           delegate:nil  
                           cancelButtonTitle: @"Done"  
                           otherButtonTitles:nil];  
-    [alert show];      
-    [msg release];  
+    [alert show];       
     [alert release];  
 }  
 
