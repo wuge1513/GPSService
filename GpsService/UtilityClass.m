@@ -365,7 +365,7 @@ static const NSInteger LOCAL_RAND_MAX = 10;
         notification.fireDate = [now dateByAddingTimeInterval:timeInterval];
         notification.timeZone = [NSTimeZone defaultTimeZone];
         //notification.repeatInterval = NSWeekCalendarUnit;//一周提示一次
-        notification.repeatInterval = kCFCalendarUnitDay; //每天一次kCFCalendarUnitDay  NSDayCalendarUnit
+        //notification.repeatInterval = kCFCalendarUnitDay; //每天一次kCFCalendarUnitDay  NSDayCalendarUnit
 
         notification.soundName = UILocalNotificationDefaultSoundName;
         notification.alertBody = strAlert;
@@ -384,14 +384,20 @@ static const NSInteger LOCAL_RAND_MAX = 10;
         tmpArr  = [strSendDate componentsSeparatedByString:@","];
         NSLog(@"tmpArr = %@", tmpArr);
         
+        notification.fireDate = [now dateByAddingTimeInterval:timeInterval];
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        
         //BOOL isPostGPSInfo = NO;
-        for (int i = 0; i < [tmpArr count]; i++) {
-            //isPostGPSInfo = [self isPostGPSInfo:strSendYear month:strSendMonth strDate:[tmpArr objectAtIndex:i]];
+        for (int i = 5; i < [tmpArr count]; i++) {
+            
             if ([[tmpArr objectAtIndex:i] isEqualToString:@"1"]) {
                 NSLog(@"===date = %d", i + 1);
                 timeInterval += 24*60*60;
                  notification.fireDate = [now dateByAddingTimeInterval:timeInterval];
                 [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+            }else{
+                timeInterval += 24*60*60;
+                notification.fireDate = [now dateByAddingTimeInterval:timeInterval];
             }
             
         }
