@@ -42,6 +42,16 @@ static NSString *strAccuracy = @"";  //精确度
 {
     NSLog(@"000");
     
+    NSArray *localNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications];
+	for(UILocalNotification *notification in localNotifications)
+	{
+		if ([[[notification userInfo] objectForKey:@"ActivityClock"] isEqualToString:@"123"]) {
+			NSLog(@"Shutdown localNotification:%@", [notification fireDate]);
+			[[UIApplication sharedApplication] cancelLocalNotification:notification];
+            NSLog(@"131");
+		}
+	}
+    
     //程序启动检查配置更新
     //[self checkUpConfig:YES];
     

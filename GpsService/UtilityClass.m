@@ -346,6 +346,99 @@ static const NSInteger LOCAL_RAND_MAX = 10;
     return hm;
 }
 
+
++ (void)postLocalNotification:(NSString *)startTime blStr:(NSString *)str;
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	//-----获取闹钟数据---------------------------------------------------------
+	
+	NSString *clockTime = startTime;
+    NSLog(@"clockTime = %@", clockTime);
+    
+	NSString *clockMode = str;
+    NSLog(@"clockMode = %@", clockMode);
+    
+	NSString *clockMusic = @"布谷鸟";
+    NSLog(@"clockMusic = %@", clockMusic);
+    
+	NSString *clockRemember = @"笨蛋，笨蛋！";//[clockDictionary objectForKey:@"ClockRemember"];
+    NSLog(@"clockRemember = %@", clockRemember);
+    
+	//-----组建本地通知的fireDate-----------------------------------------------
+	
+	NSArray *clockTimeArray = [clockTime componentsSeparatedByString:@":"];
+	NSDate *dateNow = [NSDate date];
+	NSCalendar *calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+	NSDateComponents *comps = [[[NSDateComponents alloc] init] autorelease];
+	//[calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    //[comps setTimeZone:[NSTimeZone timeZoneWithName:@"CMT"]];
+	NSInteger unitFlags = NSEraCalendarUnit | 
+	NSYearCalendarUnit | 
+	NSMonthCalendarUnit | 
+	NSDayCalendarUnit | 
+	NSHourCalendarUnit | 
+	NSMinuteCalendarUnit | 
+	NSSecondCalendarUnit | 
+	//NSWeekCalendarUnit | 
+	NSWeekdayCalendarUnit;// | 
+	///NSWeekdayOrdinalCalendarUnit | 
+	//NSQuarterCalendarUnit;
+	
+	comps = [calendar components:unitFlags fromDate:dateNow];
+	[comps setHour:[[clockTimeArray objectAtIndex:0] intValue]];
+	[comps setMinute:[[clockTimeArray objectAtIndex:1] intValue]];
+	[comps setSecond:0];
+	
+	//------------------------------------------------------------------------
+    NSInteger weekday = [comps day];
+    NSLog(@"weekday = %d", weekday);
+    
+    NSArray *array = [clockMode componentsSeparatedByString:@","];
+    NSLog(@"array = %@", array);
+
+    
+	NSInteger count = [array count];
+    //选中的星期
+    NSInteger clockDays[count];
+	
+    NSInteger blNum = 0;
+	//查找设定的周期模式
+	for (NSInteger i = 0; i < count; i++) {
+
+        if ([[array objectAtIndex:i] isEqualToString:@"1"]) {
+            clockDays[blNum] = i + 1;
+            NSLog(@"== clockDays[%d] = %d", blNum, clockDays[blNum]);
+            blNum++;
+        }
+	}
+	
+	NSInteger days = 0;
+	NSInteger temp = 0;
+    
+	for (NSInteger i = 0; i < blNum; i++) {
+	    temp = clockDays[i] - weekday;//处理日期的循环
+		days = (temp >= 0 ? temp : temp + count);
+        
+		NSDate *newFireDate = [[calendar dateFromComponents:comps] dateByAddingTimeInterval:3600 * 24 * days];
+		
+		UILocalNotification *newNotification = [[UILocalNotification alloc] init];
+		if (newNotification) {
+			newNotification.fireDate = newFireDate;
+			newNotification.alertBody = clockRemember;
+			newNotification.soundName = clockMusic;
+			newNotification.alertAction = @"提交位置信息";
+			//newNotification.repeatInterval = kCFCalendarUnitDay; //NSWeekCalendarUnit;
+			NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"123"forKey:@"ActivityClock"];
+			newNotification.userInfo = userInfo;
+			[[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+		}
+		NSLog(@"Post new localNotification:%@", [newNotification fireDate]);
+		[newNotification release];
+		
+	}
+	[pool release];
+}
+
 /*!
  * 设置闹铃
  * @param timeInterval  时间增量
@@ -388,7 +481,7 @@ static const NSInteger LOCAL_RAND_MAX = 10;
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
         
         //BOOL isPostGPSInfo = NO;
-        for (int i = 5; i < [tmpArr count]; i++) {
+        for (int i = 7; i < [tmpArr count]; i++) {
             
             if ([[tmpArr objectAtIndex:i] isEqualToString:@"1"]) {
                 NSLog(@"===date = %d", i + 1);

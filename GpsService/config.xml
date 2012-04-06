@@ -30,7 +30,7 @@
         <send-year>2012</send-year>
         <send-month>4</send-month>
         <send-date>1,1,0,0,1,1,0,0,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0</send-date>
-        <send-time>18:20:00--18:22:00</send-time>
+        <send-time>17:30:00--17:18:00</send-time><!----10:18:00-->
         <time_interval>60</time_interval>
         <manual>true</manual>
         <send-url>http://konka.mymyty.com/GPSBack.do</send-url>

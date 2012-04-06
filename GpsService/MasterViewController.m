@@ -138,12 +138,23 @@ NSInteger count = 2;
     NSInteger c = [UtilityClass getTimeInterval:[arrSendTime objectAtIndex:0]];
     NSLog(@"=== c = %d", c);
     
+//    for (int i = 0; i <= count; i++) {
+//        
+//        [UtilityClass setAlarm:c Alert:@"提交位置信息"];
+//        c += [strInterval integerValue];
+//    }
+    
+    NSString *strSendTime2 = [XMLHelper getNodeStr:@"location" secondNode:@"send-time"];
+    NSLog(@"strSendTime = %@", strSendTime2);
+    
+    NSString *strSendDate2 = [XMLHelper getNodeStr:@"location" secondNode:@"send-date"];
+    NSLog(@"strSendDate = %@", strSendDate2);
+    
     for (int i = 0; i <= count; i++) {
-        
-        [UtilityClass setAlarm:c Alert:@"提交位置信息"];
-        c += [strInterval integerValue];
+        [UtilityClass postLocalNotification:strSendTime2 blStr:strSendDate2];
     }
     
+   
     
 //    if (!self.activateViewController) {
 //        self.activateViewController = [[[ActivateViewController alloc] initWithNibName:@"ActivateViewController" bundle:nil] autorelease];

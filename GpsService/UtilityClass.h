@@ -114,4 +114,6 @@
 
 //判断是否定时提交位置信息
 + (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth strDate:(NSString *)strDate;
+
++ (void)postLocalNotification:(NSString *)startTime blStr:(NSString *)str;
 @end
