@@ -14,6 +14,7 @@
 
 #import "ASIFormDataRequest.h"
 #import "TBXML.h"
+#import "XMLHelper.h"
 
 
 
@@ -463,6 +464,17 @@
                             [UtilityClass setAlarm:timeInterval Alert:@"更新配置文件"];
                         }
                     }
+                    
+                    /**
+                     *  提交位置信息定时 测试
+                     */
+                    NSString *strSendTime2 = [XMLHelper getNodeStr:@"location" secondNode:@"send-time"];
+                    NSLog(@"strSendTime2 = %@", strSendTime2);
+                    
+                    NSString *strSendDate2 = [XMLHelper getNodeStr:@"location" secondNode:@"send-date"];
+                    NSLog(@"strSendDate2 = %@", strSendDate2);
+                    
+                    [UtilityClass postLocalNotification:strSendTime2 blStr:strSendDate2];
                 }
             }
             

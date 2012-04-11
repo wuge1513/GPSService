@@ -349,6 +349,28 @@ static const NSInteger LOCAL_RAND_MAX = 10;
 
 + (void)postLocalNotification:(NSString *)startTime blStr:(NSString *)str;
 {
+    
+    
+    NSString *strInterval = [XMLHelper getNodeStr:@"location" secondNode:@"time_interval"];
+    NSLog(@"strInterval = %@", strInterval);
+    
+    
+    NSArray *arrSendTime = [[[NSArray alloc] init]  autorelease];
+    arrSendTime = [startTime componentsSeparatedByString:@"--"];
+    NSLog(@"========arrSendTime = %@", arrSendTime);
+    
+    NSInteger intStartTime = [UtilityClass getTimeInterval:[arrSendTime objectAtIndex:0]];
+    NSLog(@"=== intStartTime = %d", intStartTime);
+    NSInteger intEndTime = [UtilityClass getTimeInterval:[arrSendTime objectAtIndex:1]];
+    NSLog(@"=== intEndTime = %d", intEndTime);
+    
+    NSInteger intSumTime = intEndTime - intStartTime > 0 ? (intEndTime - intStartTime) : (intEndTime + intStartTime);
+    NSLog(@"==== intSumTime = %d", intSumTime);
+    
+    NSInteger count1 = intSumTime / [strInterval integerValue];
+    NSLog(@"count1 = %d", count1);
+    
+    
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	//-----获取闹钟数据---------------------------------------------------------
 	
@@ -419,21 +441,26 @@ static const NSInteger LOCAL_RAND_MAX = 10;
 	    temp = clockDays[i] - weekday;//处理日期的循环
 		days = (temp >= 0 ? temp : temp + count);
         
-		NSDate *newFireDate = [[calendar dateFromComponents:comps] dateByAddingTimeInterval:3600 * 24 * days];
-		
-		UILocalNotification *newNotification = [[UILocalNotification alloc] init];
-		if (newNotification) {
-			newNotification.fireDate = newFireDate;
-			newNotification.alertBody = clockRemember;
-			newNotification.soundName = clockMusic;
-			newNotification.alertAction = @"提交位置信息";
-			//newNotification.repeatInterval = kCFCalendarUnitDay; //NSWeekCalendarUnit;
-			NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"123"forKey:@"ActivityClock"];
-			newNotification.userInfo = userInfo;
-			[[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
-		}
-		NSLog(@"Post new localNotification:%@", [newNotification fireDate]);
-		[newNotification release];
+        for (NSInteger i = 0; i <= count1; i++) {
+            NSDate *newFireDate = [[calendar dateFromComponents:comps] dateByAddingTimeInterval:3600 * 24 * days + [strInterval integerValue] * i];
+            UILocalNotification *newNotification = [[UILocalNotification alloc] init];
+            if (newNotification) {
+                newNotification.fireDate = newFireDate;
+                newNotification.alertBody = clockRemember;
+                newNotification.soundName = clockMusic;
+                newNotification.alertAction = @"提交位置信息";
+                //newNotification.repeatInterval = kCFCalendarUnitDay; //NSWeekCalendarUnit;
+                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"123"forKey:@"ActivityClock"];
+                newNotification.userInfo = userInfo;
+                [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+            }
+            NSLog(@"Post new localNotification:%@", [newNotification fireDate]);
+            
+
+            [newNotification release];
+        }
+        
+
 		
 	}
 	[pool release];

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A96B9007151C1E81009AF3EC /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A96B9006151C1E81009AF3EC /* icon.png */; };
-		A96B900A151C2BD7009AF3EC /* cell_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = A96B9009151C2BD7009AF3EC /* cell_bg.png */; };
 		A98C097814FB8EF60094D1EB /* PBEWithMD5AndDES.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C097714FB8EF60094D1EB /* PBEWithMD5AndDES.m */; };
 		A98C097B14FB927E0094D1EB /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C097A14FB927E0094D1EB /* UtilityClass.m */; };
 		A98F2FE914FB4459009E8CEB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98F2FE814FB4459009E8CEB /* CoreLocation.framework */; };
@@ -32,7 +31,6 @@
 		CEDC8F6D14F8A8D7009E7D13 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC8F6C14F8A8D7009E7D13 /* SystemConfiguration.framework */; };
 		CEDC8F6F14F8A8EB009E7D13 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC8F6E14F8A8EB009E7D13 /* Security.framework */; };
 		CEDD936F15009CA400278F0C /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDD936E15009CA400278F0C /* NSData+CRC32.m */; };
-		CEE16B43151701EC00E72FE2 /* configx.xml in Resources */ = {isa = PBXBuildFile; fileRef = CEE16B42151701EC00E72FE2 /* configx.xml */; };
 		CEE61DF7150E1E3F0074F764 /* LLFileManage.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE61DF6150E1E3F0074F764 /* LLFileManage.m */; };
 		CEEA940714F5826000E9E79D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEA940614F5826000E9E79D /* UIKit.framework */; };
 		CEEA940914F5826000E9E79D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEA940814F5826000E9E79D /* Foundation.framework */; };
@@ -52,7 +50,6 @@
 
 /* Begin PBXFileReference section */
 		A96B9006151C1E81009AF3EC /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		A96B9009151C2BD7009AF3EC /* cell_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_bg.png; sourceTree = "<group>"; };
 		A98C097614FB8EF60094D1EB /* PBEWithMD5AndDES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBEWithMD5AndDES.h; sourceTree = "<group>"; };
 		A98C097714FB8EF60094D1EB /* PBEWithMD5AndDES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBEWithMD5AndDES.m; sourceTree = "<group>"; };
 		A98C097914FB927E0094D1EB /* UtilityClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilityClass.h; sourceTree = "<group>"; };
@@ -96,7 +93,6 @@
 		CEDC8F6E14F8A8EB009E7D13 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CEDD936D15009CA400278F0C /* NSData+CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC32.h"; sourceTree = "<group>"; };
 		CEDD936E15009CA400278F0C /* NSData+CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC32.m"; sourceTree = "<group>"; };
-		CEE16B42151701EC00E72FE2 /* configx.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = configx.xml; sourceTree = "<group>"; };
 		CEE61DF5150E1E3E0074F764 /* LLFileManage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLFileManage.h; path = LLFileManage/LLFileManage.h; sourceTree = SOURCE_ROOT; };
 		CEE61DF6150E1E3F0074F764 /* LLFileManage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLFileManage.m; path = LLFileManage/LLFileManage.m; sourceTree = SOURCE_ROOT; };
 		CEEA940214F5826000E9E79D /* GpsService.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GpsService.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -273,10 +269,8 @@
 			isa = PBXGroup;
 			children = (
 				A96B9006151C1E81009AF3EC /* icon.png */,
-				A96B9009151C2BD7009AF3EC /* cell_bg.png */,
 				CEEA940E14F5826000E9E79D /* GpsService-Info.plist */,
 				CEEA940F14F5826000E9E79D /* InfoPlist.strings */,
-				CEE16B42151701EC00E72FE2 /* configx.xml */,
 				A9EE737D151C501300630484 /* config.xml */,
 				A9917D901504BF9D00D1FC34 /* Localizable.strings */,
 				CEEA941214F5826000E9E79D /* main.m */,
@@ -340,10 +334,8 @@
 				CEEA942314F5826000E9E79D /* ActivateViewController.xib in Resources */,
 				CEEA943C14F851FF00E9E79D /* GpsInfoViewController.xib in Resources */,
 				A9917D911504BF9D00D1FC34 /* Localizable.strings in Resources */,
-				CEE16B43151701EC00E72FE2 /* configx.xml in Resources */,
 				A9EE737E151C501300630484 /* config.xml in Resources */,
 				A96B9007151C1E81009AF3EC /* icon.png in Resources */,
-				A96B900A151C2BD7009AF3EC /* cell_bg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

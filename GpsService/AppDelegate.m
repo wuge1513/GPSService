@@ -41,15 +41,16 @@ static NSString *strAccuracy = @"";  //精确度
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSLog(@"000");
-    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     NSArray *localNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications];
 	for(UILocalNotification *notification in localNotifications)
 	{
-		if ([[[notification userInfo] objectForKey:@"ActivityClock"] isEqualToString:@"123"]) {
+		//if ([[[notification userInfo] objectForKey:@"ActivityClock"] isEqualToString:@"123"]) {
 			NSLog(@"Shutdown localNotification:%@", [notification fireDate]);
 			[[UIApplication sharedApplication] cancelLocalNotification:notification];
+           
             NSLog(@"131");
-		}
+		//}
 	}
     
     //程序启动检查配置更新

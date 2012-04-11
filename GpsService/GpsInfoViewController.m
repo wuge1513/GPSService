@@ -85,8 +85,7 @@
     } 
     [_lm release];
     
-    self.tfPhoneNum.text = [XMLHelper getNodeStr:@"mobile-no"];
-    self.tfLocationTime.text = [UtilityClass getSystemTime:@"yyyy-MM-dd HH:mm:ss"];
+
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -290,6 +289,8 @@
     [lng release]; 
     
     self.tfLocationWay.text = @"GPS";
+    self.tfPhoneNum.text = [XMLHelper getNodeStr:@"mobile-no"];
+    self.tfLocationTime.text = [UtilityClass getSystemTime:@"yyyy-MM-dd HH:mm:ss"];
     
 }  
 

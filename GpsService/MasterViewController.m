@@ -80,7 +80,7 @@ NSInteger count = 2;
     self.lblServiceState.backgroundColor = [UIColor clearColor];
     self.lblServiceState.textColor = [UIColor blackColor];
     self.lblServiceState.textAlignment = UITextAlignmentCenter;
-    //[self.view addSubview:self.lblServiceState];
+    [self.view addSubview:self.lblServiceState];
     [_lblServiceState release];
     
 
@@ -100,6 +100,9 @@ NSInteger count = 2;
 - (void)actionActivate{
     NSLog(@"123");
     
+    /**
+     *  配置文件更新定时 测试
+     */
 //    NSString *strTime = [XMLHelper getNodeStr:@"config-update" secondNode:@"time"];
 //    NSLog(@"strTime = %@", strTime);
 //    
@@ -113,53 +116,25 @@ NSInteger count = 2;
 //        [UtilityClass setAlarm:timeInterval Alert:@"更新配置文件"];
 //    }
     
-    NSString *strSendTime = [XMLHelper getNodeStr:@"location" secondNode:@"send-time"];
-    NSLog(@"strSendTime = %@", strSendTime);
-    
-    NSString *strInterval = [XMLHelper getNodeStr:@"location" secondNode:@"time_interval"];
-    NSLog(@"strInterval = %@", strInterval);
-    
-    
-    NSArray *arrSendTime = [[[NSArray alloc] init]  autorelease];
-    arrSendTime = [strSendTime componentsSeparatedByString:@"--"];
-    NSLog(@"========arrSendTime = %@", arrSendTime);
-    
-    NSInteger intStartTime = [UtilityClass getTimeInterval:[arrSendTime objectAtIndex:0]];
-    NSLog(@"=== intStartTime = %d", intStartTime);
-    NSInteger intEndTime = [UtilityClass getTimeInterval:[arrSendTime objectAtIndex:1]];
-    NSLog(@"=== intEndTime = %d", intEndTime);
-    
-    NSInteger intSumTime = intEndTime - intStartTime > 0 ? (intEndTime - intStartTime) : (intEndTime + intStartTime);
-    NSLog(@"==== intSumTime = %d", intSumTime);
-    
-    NSInteger count = intSumTime / [strInterval integerValue];
-    NSLog(@"count = %d", count);
-    
-    NSInteger c = [UtilityClass getTimeInterval:[arrSendTime objectAtIndex:0]];
-    NSLog(@"=== c = %d", c);
-    
-//    for (int i = 0; i <= count; i++) {
-//        
-//        [UtilityClass setAlarm:c Alert:@"提交位置信息"];
-//        c += [strInterval integerValue];
-//    }
-    
-    NSString *strSendTime2 = [XMLHelper getNodeStr:@"location" secondNode:@"send-time"];
-    NSLog(@"strSendTime = %@", strSendTime2);
-    
-    NSString *strSendDate2 = [XMLHelper getNodeStr:@"location" secondNode:@"send-date"];
-    NSLog(@"strSendDate = %@", strSendDate2);
-    
-    for (int i = 0; i <= count; i++) {
-        [UtilityClass postLocalNotification:strSendTime2 blStr:strSendDate2];
-    }
+
+    /**
+     *  提交位置信息定时 测试
+     */
+//    NSString *strSendTime2 = [XMLHelper getNodeStr:@"location" secondNode:@"send-time"];
+//    NSLog(@"strSendTime2 = %@", strSendTime2);
+//    
+//    NSString *strSendDate2 = [XMLHelper getNodeStr:@"location" secondNode:@"send-date"];
+//    NSLog(@"strSendDate2 = %@", strSendDate2);
+//
+//    [UtilityClass postLocalNotification:strSendTime2 blStr:strSendDate2];
+
     
    
     
-//    if (!self.activateViewController) {
-//        self.activateViewController = [[[ActivateViewController alloc] initWithNibName:@"ActivateViewController" bundle:nil] autorelease];
-//    }
-//    [self.navigationController pushViewController:self.activateViewController animated:YES];
+    if (!self.activateViewController) {
+        self.activateViewController = [[[ActivateViewController alloc] initWithNibName:@"ActivateViewController" bundle:nil] autorelease];
+    }
+    [self.navigationController pushViewController:self.activateViewController animated:YES];
 }
 
 #pragma mark-
@@ -292,7 +267,7 @@ NSInteger count = 2;
             case 1:
             {
                 CompanyInfoViewController *comInfoCtl = [[CompanyInfoViewController alloc] init];
-                comInfoCtl.strUrl = [[NSUserDefaults standardUserDefaults] objectForKey:COMPANY_URL];//@"konka.mymyty.com";
+                comInfoCtl.strUrl = [XMLHelper getNodeStr:@"company-info" secondNode:@"page-url"];//@"konka.mymyty.com";
                 [self.navigationController pushViewController:comInfoCtl animated:YES];
                 [comInfoCtl release];
                 break;
