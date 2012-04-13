@@ -25,7 +25,7 @@
 - (void)getConfigUpDate:(NSData *)data;
 
 //获取是否提交定位信息条件
-- (void)getGPSCondition:(NSData *)data;
+//- (void)getGPSCondition:(NSData *)data;
 
 //定时提交位置信息
 - (void)postGPSInfo;
@@ -34,6 +34,6 @@
 - (void)getGPSInfo;
 
 //判断是否定时提交位置信息
-- (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth blDate:(NSArray *)dateArr;
+//- (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth blDate:(NSArray *)dateArr;
 
 @end

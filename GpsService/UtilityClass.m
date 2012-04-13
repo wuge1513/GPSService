@@ -450,7 +450,7 @@ static const NSInteger LOCAL_RAND_MAX = 10;
                 newNotification.soundName = clockMusic;
                 newNotification.alertAction = @"提交位置信息";
                 //newNotification.repeatInterval = kCFCalendarUnitDay; //NSWeekCalendarUnit;
-                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"123"forKey:@"ActivityClock"];
+                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"002"forKey:@"uploadGps"];
                 newNotification.userInfo = userInfo;
                 [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
             }
@@ -490,12 +490,8 @@ static const NSInteger LOCAL_RAND_MAX = 10;
         notification.soundName = UILocalNotificationDefaultSoundName;
         notification.alertBody = strAlert;
         notification.applicationIconBadgeNumber++; 	
-        NSDictionary *userinfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithInt: 123], @"test",nil];
-        notification.userInfo = userinfo;
-        
-        //NSString *strSendYear = @"2012";//= [XMLHelper getNodeStr:<#(NSString *)#> secondNode:<#(NSString *)#>];
-        //NSString *strSendMonth = @"4";
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"001"forKey:@"updateConfig"];
+        notification.userInfo = userInfo;
         
         NSString *strSendDate = [XMLHelper getNodeStr:@"location" secondNode:@"send-date"];
 

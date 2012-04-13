@@ -30,7 +30,7 @@ NSInteger count = 2;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        //self.title = NSLocalizedString(@"定位服务程序", nil);
+        self.title = NSLocalizedString(@"定位服务程序", nil);
         
         //自定义按钮
 //        UIButton *selectButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -241,7 +241,7 @@ NSInteger count = 2;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BOOL isActivati = YES;//[self isActivation];
+    BOOL isActivati = [self isActivation];
     
     if (!isActivati) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"提示", nil) 

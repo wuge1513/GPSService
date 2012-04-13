@@ -209,7 +209,9 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    //return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    return (interfaceOrientation == UIInterfaceOrientationPortrait ||
+            interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown);
 }
 
 
@@ -430,7 +432,7 @@
             if ([strCode isEqualToString:@"0"]) {
                 
                 //配置文件保存到本地沙盒
-                //[LLFileManage WritteToFile:data FileName:@"config.xml"];
+                [LLFileManage WritteToFile:data FileName:@"config.xml"];
                 
                 //解析公司网址
                 TBXMLElement *companyUrl = [TBXML childElementNamed:@"company-info" parentElement:root];

@@ -41,20 +41,9 @@ static NSString *strAccuracy = @"";  //精确度
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSLog(@"000");
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    NSArray *localNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications];
-	for(UILocalNotification *notification in localNotifications)
-	{
-		//if ([[[notification userInfo] objectForKey:@"ActivityClock"] isEqualToString:@"123"]) {
-			NSLog(@"Shutdown localNotification:%@", [notification fireDate]);
-			[[UIApplication sharedApplication] cancelLocalNotification:notification];
-           
-            NSLog(@"131");
-		//}
-	}
     
     //程序启动检查配置更新
-    //[self checkUpConfig:YES];
+    [self checkUpConfig:YES];
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
@@ -81,14 +70,25 @@ static NSString *strAccuracy = @"";  //精确度
 -(void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     NSLog(@"接收定时通知代理");
+    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    NSArray *localNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications];
+	for(UILocalNotification *notification in localNotifications)
+	{
+		if ([[[notification userInfo] objectForKey:@"updateConfig"] isEqualToString:@"001"]) {
+            NSLog(@"配置文件1");
+		}
+        
+        if ([[[notification userInfo] objectForKey:@"uploadGps"] isEqualToString:@"002"]) {
+            NSLog(@"上传gps2");
+		}
+	}
+    
     //启动检查配置更新
-    //[self checkUpConfig:YES];
-    
-    NSURL *url = [NSURL URLWithString:@"http://www.baidu.com"];
-    [[UIApplication sharedApplication] openURL:url];
-    
+    [self checkUpConfig:YES];
     //判断是否提交位置信息, 提交位置信息
     //[self checkUpConfig:NO];
+    [self postGPSInfo];
 }
 
 //进入后台，设置定时
@@ -278,6 +278,7 @@ static NSString *strAccuracy = @"";  //精确度
             [request setPostValue: _ct forKey:@"ct"];
             [request setPostValue: _idc forKey:@"idc"];
             [request setTimeOutSeconds:1000];
+            [request setDidReceiveDataSelector:@selector(getData1:didRData:)];
             [request startAsynchronous]; //异步执行
             [request release];
             
@@ -285,13 +286,12 @@ static NSString *strAccuracy = @"";  //精确度
     }
 }
 
-- (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
+//- (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
+- (void)getData1:(ASIHTTPRequest *)request didRData:(NSData *)data
 {
     NSAssert(data, @"Check config request: receive data is nil.");
     
     NSLog(@"----xml = %@", [UtilityClass DataToUTF8String:data]);
-    
-    
     
     TBXML *tbxml = [TBXML tbxmlWithXMLData:data error:nil];
     
@@ -331,7 +331,7 @@ static NSString *strAccuracy = @"";  //精确度
 #pragma mark- 定时提交位置信息
 
 //获得是否提交位置信息条件
-- (void)getGPSCondition:(NSData *)data
+/*- (void)getGPSCondition:(NSData *)data
 {
     NSLog(@"获取是否提交位置信息条件");
     NSAssert(data, @"GPS Condition: local data is nil");
@@ -412,10 +412,13 @@ static NSString *strAccuracy = @"";  //精确度
             
         }//location end!
     }//root end!
-}
+}*/
 
 - (void)postGPSInfo
 {
+    //获取位置信息
+    [self getGPSInfo];
+    
     NSString *no = [XMLHelper getNodeStr:@"mobile-no"];//self.tfPhoneNum.text;
     NSString *x = strLongitude; 
     NSString *y = strLatitude;
@@ -503,6 +506,7 @@ static NSString *strAccuracy = @"";  //精确度
     [request setPostValue:t_z forKey:@"z"];
     [request setPostValue:t_idc forKey:@"idc"];
     [request setTimeOutSeconds:1000];
+    [request setDidReceiveDataSelector:@selector(getData2:didRData:)];
     [request startAsynchronous]; //异步执行
     [request release];
     
@@ -535,8 +539,31 @@ static NSString *strAccuracy = @"";  //精确度
     
 }
 
+- (void)getData2:(ASIHTTPRequest *)request didRData:(NSData *)data
+{
+    NSLog(@"gps");
+    
+    NSAssert(data, @"GPS info request: data is nil");
+    
+    NSLog(@"json = %@", [UtilityClass DataToUTF8String:data]);
+    
+    NSDictionary *resDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+    NSLog(@"%@", resDic);
+    NSString *resultCode = [resDic objectForKey:@"status"];
+    NSLog(@"resultCode = %@", resultCode);
+    
+    NSString *strResult;
+    if ([resultCode isEqualToString:@"1"]) {
+        strResult = @"上传成功！";
+    }else{
+        strResult = @"上传失败！";
+    }
+    
+    NSLog(@"自动：%@", strResult);
+}
+
 //判断是否定时提交位置信息
-- (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth blDate:(NSArray *)dateArr
+/*- (BOOL)isPostGPSInfo:(NSString *)strYear month:(NSString *)strMonth blDate:(NSArray *)dateArr
 {
     //拼接时间
     NSString *theDate = @"";
@@ -557,7 +584,7 @@ static NSString *strAccuracy = @"";  //精确度
         return YES;
     }
     return NO;
-}
+}*/
 
 //定时提交位置信息
 - (void)getGPSInfo

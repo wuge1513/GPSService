@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A92EDC2F1536FA3A0048E835 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = A92EDC2E1536FA3A0048E835 /* Default.png */; };
 		A96B9007151C1E81009AF3EC /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A96B9006151C1E81009AF3EC /* icon.png */; };
 		A98C097814FB8EF60094D1EB /* PBEWithMD5AndDES.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C097714FB8EF60094D1EB /* PBEWithMD5AndDES.m */; };
 		A98C097B14FB927E0094D1EB /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C097A14FB927E0094D1EB /* UtilityClass.m */; };
@@ -49,6 +50,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A92EDC2E1536FA3A0048E835 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		A96B9006151C1E81009AF3EC /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A98C097614FB8EF60094D1EB /* PBEWithMD5AndDES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBEWithMD5AndDES.h; sourceTree = "<group>"; };
 		A98C097714FB8EF60094D1EB /* PBEWithMD5AndDES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBEWithMD5AndDES.m; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 			isa = PBXGroup;
 			children = (
 				A96B9006151C1E81009AF3EC /* icon.png */,
+				A92EDC2E1536FA3A0048E835 /* Default.png */,
 				CEEA940E14F5826000E9E79D /* GpsService-Info.plist */,
 				CEEA940F14F5826000E9E79D /* InfoPlist.strings */,
 				A9EE737D151C501300630484 /* config.xml */,
@@ -336,6 +339,7 @@
 				A9917D911504BF9D00D1FC34 /* Localizable.strings in Resources */,
 				A9EE737E151C501300630484 /* config.xml in Resources */,
 				A96B9007151C1E81009AF3EC /* icon.png in Resources */,
+				A92EDC2F1536FA3A0048E835 /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,8 +411,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: 磊 刘 (48G2C6DS36)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 磊 刘 (48G2C6DS36)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Liu Lei";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Liu Lei";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -423,8 +427,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PROVISIONING_PROFILE = "67F01537-841F-47E0-9F01-07DEE3D2F3C6";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4A6E9092-3A7A-426C-BB06-56DBC41605D0";
+				PROVISIONING_PROFILE = "A3B9437D-701A-42A5-9B1C-524F9EFC7B68";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A3B9437D-701A-42A5-9B1C-524F9EFC7B68";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -434,8 +438,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: 磊 刘 (48G2C6DS36)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 磊 刘 (48G2C6DS36)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Liu Lei";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Liu Lei";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -444,8 +448,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "4A6E9092-3A7A-426C-BB06-56DBC41605D0";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4A6E9092-3A7A-426C-BB06-56DBC41605D0";
+				PROVISIONING_PROFILE = "A3B9437D-701A-42A5-9B1C-524F9EFC7B68";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A3B9437D-701A-42A5-9B1C-524F9EFC7B68";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -457,6 +461,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GpsService/GpsService-Prefix.pch";
 				INFOPLIST_FILE = "GpsService/GpsService-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -468,6 +473,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GpsService/GpsService-Prefix.pch";
 				INFOPLIST_FILE = "GpsService/GpsService-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
