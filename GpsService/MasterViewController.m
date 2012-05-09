@@ -267,7 +267,8 @@ NSInteger count = 2;
             case 1:
             {
                 CompanyInfoViewController *comInfoCtl = [[CompanyInfoViewController alloc] init];
-                comInfoCtl.strUrl = [XMLHelper getNodeStr:@"company-info" secondNode:@"page-url"];//@"konka.mymyty.com";
+                comInfoCtl.strUrl = @"http://konka.mymyty.com";//[XMLHelper getNodeStr:@"company-info" secondNode:@"page-url"];//;
+                NSLog(@"123 = %@", comInfoCtl.strUrl);
                 [self.navigationController pushViewController:comInfoCtl animated:YES];
                 [comInfoCtl release];
                 break;

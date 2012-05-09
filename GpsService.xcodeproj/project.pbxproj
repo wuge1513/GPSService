@@ -15,6 +15,7 @@
 		A9917D891504AB5E00D1FC34 /* CompanyInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9917D881504AB5E00D1FC34 /* CompanyInfoViewController.m */; };
 		A9917D911504BF9D00D1FC34 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9917D901504BF9D00D1FC34 /* Localizable.strings */; };
 		A9EE737E151C501300630484 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = A9EE737D151C501300630484 /* config.xml */; };
+		CE144DFF155ADCC700D40A41 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CE144DFE155ADCC700D40A41 /* MBProgressHUD.m */; };
 		CEDC8F2214F8A1C7009E7D13 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDC8F2114F8A1C7009E7D13 /* libz.dylib */; };
 		CEDC8F4214F8A4F9009E7D13 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDC8F2F14F8A4F9009E7D13 /* ASIAuthenticationDialog.m */; };
 		CEDC8F4314F8A4F9009E7D13 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDC8F3214F8A4F9009E7D13 /* ASIDataCompressor.m */; };
@@ -62,6 +63,8 @@
 		A9917D8F1504B59B00D1FC34 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		A9917D901504BF9D00D1FC34 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		A9EE737D151C501300630484 /* config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
+		CE144DFD155ADCC700D40A41 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = HUD/MBProgressHUD.h; sourceTree = "<group>"; };
+		CE144DFE155ADCC700D40A41 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = HUD/MBProgressHUD.m; sourceTree = "<group>"; };
 		CEDC8F2114F8A1C7009E7D13 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		CEDC8F2E14F8A4F9009E7D13 /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
 		CEDC8F2F14F8A4F9009E7D13 /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
@@ -142,6 +145,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE144DEB155ADA1F00D40A41 /* HUD */ = {
+			isa = PBXGroup;
+			children = (
+				CE144DFD155ADCC700D40A41 /* MBProgressHUD.h */,
+				CE144DFE155ADCC700D40A41 /* MBProgressHUD.m */,
+			);
+			name = HUD;
+			sourceTree = "<group>";
+		};
 		CEDC8F1614F8A114009E7D13 /* TBXML */ = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +234,7 @@
 		CEEA93F714F5826000E9E79D = {
 			isa = PBXGroup;
 			children = (
+				CE144DEB155ADA1F00D40A41 /* HUD */,
 				CEDC8F1614F8A114009E7D13 /* TBXML */,
 				CEDC8F2D14F8A4F9009E7D13 /* ASIHTTPRequest */,
 				CEEA940C14F5826000E9E79D /* GpsService */,
@@ -257,10 +270,10 @@
 		CEEA940C14F5826000E9E79D /* GpsService */ = {
 			isa = PBXGroup;
 			children = (
+				CEE61DF8150E253A0074F764 /* Support */,
 				A9917D8F1504B59B00D1FC34 /* Config.h */,
 				CEEA941514F5826000E9E79D /* AppDelegate.h */,
 				CEEA941614F5826000E9E79D /* AppDelegate.m */,
-				CEE61DF8150E253A0074F764 /* Support */,
 				CEE61DF9150E25700074F764 /* ViewController */,
 				CEEA940D14F5826000E9E79D /* Supporting Files */,
 			);
@@ -373,6 +386,7 @@
 				CEE61DF7150E1E3F0074F764 /* LLFileManage.m in Sources */,
 				CEF55F5F150190D6003C4274 /* XMLHelper.m in Sources */,
 				CEF55F6A15019132003C4274 /* Reachability.m in Sources */,
+				CE144DFF155ADCC700D40A41 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

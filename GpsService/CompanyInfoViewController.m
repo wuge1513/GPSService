@@ -10,7 +10,7 @@
 
 @implementation CompanyInfoViewController
 @synthesize strUrl;
-
+@synthesize HUD;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -35,6 +35,7 @@
 
 - (void)dealloc
 {
+    [HUD release];
     [strUrl release];
     [super dealloc];
 }
@@ -56,7 +57,11 @@
 }
 */
 
-
+- (void)myTask {
+	// Do something usefull in here instead of sleeping ...
+	sleep(2);
+    [self.HUD removeFromSuperview];
+}
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
@@ -66,10 +71,19 @@
     NSString *_strUrl = self.strUrl;
     NSURL *_url = [NSURL URLWithString:_strUrl];
     
+    self.HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+	[self.navigationController.view addSubview:self.HUD];
+	self.HUD.delegate = self;
+	self.HUD.labelText = @"正在加载...";
+    //[self.HUD show:YES];
+    [HUD showWhileExecuting:@selector(myTask) onTarget:self withObject:nil animated:YES];
     //UIWebView
 	UIWebView *theWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0 - 44)];
     [self.view addSubview:theWebView];
     [theWebView release];
+    
+    NSURLRequest *_request = [[[NSURLRequest alloc] initWithURL:_url] autorelease];
+    [theWebView loadRequest:_request];
     
 	theWebView.backgroundColor = [UIColor clearColor];
 	theWebView.opaque = NO;
@@ -89,12 +103,7 @@
                 }
             }
         }
-    }
-    
- 
-    NSURLRequest *_request = [NSURLRequest requestWithURL:_url];
-    [theWebView  loadRequest:_request];
-    
+    }   
 
 }
 

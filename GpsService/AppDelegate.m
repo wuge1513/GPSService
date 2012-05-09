@@ -43,7 +43,7 @@ static NSString *strAccuracy = @"";  //精确度
     NSLog(@"000");
     
     //程序启动检查配置更新
-    [self checkUpConfig:YES];
+    //[self checkUpConfig:YES];
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
