@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import "MBProgressHUD.h"
 
-@interface GpsInfoViewController : UIViewController<CLLocationManagerDelegate>
+@interface GpsInfoViewController : UIViewController<CLLocationManagerDelegate, MBProgressHUDDelegate>
+
+@property (strong, nonatomic) MBProgressHUD *HUD;
 
 @property (strong, nonatomic) IBOutlet UITextField *latitudeTextField;  
 @property (strong, nonatomic) IBOutlet UITextField *longitudeTextField;  

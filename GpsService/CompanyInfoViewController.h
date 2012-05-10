@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface CompanyInfoViewController : UIViewController
-
+#import "MBProgressHUD.h"
+@interface CompanyInfoViewController : UIViewController<MBProgressHUDDelegate>
+@property (strong, nonatomic) MBProgressHUD *HUD;
 @property (strong, nonatomic) NSString *strUrl;
 
 - (void)actionBack;

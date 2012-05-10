@@ -14,13 +14,15 @@
 //ASIHttpRequest
 #import "ASIFormDataRequest.h"
 #import "XMLHelper.h"
+#import "MBProgressHUD.h"
 
 @implementation GpsInfoViewController
 @synthesize latitudeTextField, longitudeTextField, accuracyTextField;  
-@synthesize lm; 
+@synthesize lm, HUD; 
 @synthesize tfLocationWay, tfLocationTime, tfPhoneNum;
 
 - (void)dealloc{
+    [HUD release];
     [tfLocationWay release];
     [tfLocationTime release];
     [tfPhoneNum release];
@@ -204,8 +206,11 @@
     [request startAsynchronous]; //异步执行
     [request release];
 
-    
-    
+    self.HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+	[self.navigationController.view addSubview:self.HUD];
+	self.HUD.delegate = self;
+	self.HUD.labelText = @"正在提交...";
+    [self.HUD show:YES];
     /*!
      * 解密过程 测试加密算法
      */ 
@@ -238,7 +243,9 @@
 - (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data
 {
     NSAssert(data, @"GPS info request: data is nil");
+
     
+    [self.HUD removeFromSuperview];
     NSLog(@"json = %@", [UtilityClass DataToUTF8String:data]);
     
     NSDictionary *resDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
@@ -311,6 +318,17 @@
     [msg release];  
     [alert release];  
 }  
+
+
+#pragma mark -
+#pragma mark MBProgressHUDDelegate methods
+
+//- (void)hudWasHidden:(MBProgressHUD *)hud {
+//	// Remove HUD from screen when the HUD was hidded
+//	[HUD removeFromSuperview];
+//	//[HUD release];
+//	HUD = nil;
+//}
 
 
 @end

@@ -15,6 +15,7 @@
 #import "ASIFormDataRequest.h"
 #import "TBXML.h"
 #import "XMLHelper.h"
+#import "MBProgressHUD.h"
 
 
 
@@ -22,11 +23,11 @@
 
 @implementation ActivateViewController
 
-//@synthesize lblCompanyNum, tfCompanyNum;
+@synthesize lblCompanyNum, tfCompanyNum;
 @synthesize lblPhoneNum, lblPersonNum;
 @synthesize tfPhoneNum, tfPersonNum;  
 @synthesize strHost;
-
+@synthesize HUD;
 @synthesize webData;
 
 
@@ -51,6 +52,7 @@
 
 - (void)dealloc
 {
+    [HUD release];
     [strHost release];
     [lblPhoneNum release];
     //[lblCompanyNum release];
@@ -78,7 +80,7 @@
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     //手机号标签
-    UILabel *_lblPhoneNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 60.0, 100.0, 30.0)];
+    UILabel *_lblPhoneNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 40.0, 100.0, 30.0)];
     self.lblPhoneNum = _lblPhoneNum;
     self.lblPhoneNum.text = NSLocalizedString(@"确认手机号", nil);
     self.lblPhoneNum.backgroundColor = [UIColor clearColor];
@@ -86,12 +88,12 @@
     [_lblPhoneNum release];
     
     //公司确认码
-//    UILabel *_lblCompanyNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 100.0, 100.0, 30.0)];
-//    self.lblCompanyNum = _lblCompanyNum;
-//    self.lblCompanyNum.text = @"公司确认码";
-//    self.lblCompanyNum.backgroundColor = [UIColor clearColor];
-//    [self.view addSubview:self.lblCompanyNum];
-//    [_lblCompanyNum release];
+    UILabel *_lblCompanyNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 80.0, 100.0, 30.0)];
+    self.lblCompanyNum = _lblCompanyNum;
+    self.lblCompanyNum.text = @"公司确认码";
+    self.lblCompanyNum.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.lblCompanyNum];
+    [_lblCompanyNum release];
     
     //个人确认码
     UILabel *_lblPersonNum = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 120.0, 100.0, 30.0)];
@@ -102,7 +104,7 @@
     [_lblPersonNum release];
     
     //确认手机号输入框
-    UITextField *_tfPhoneNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 60.0, 200.0, 30.0)];
+    UITextField *_tfPhoneNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 40.0, 200.0, 30.0)];
     self.tfPhoneNum = _tfPhoneNum;
     self.tfPhoneNum.borderStyle = UITextBorderStyleRoundedRect;
     self.tfPhoneNum.delegate = self;
@@ -112,14 +114,14 @@
     [_tfPhoneNum release];
     
     //公司确认码输入框
-//    UITextField *_tfCompanyNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 100.0, 200.0, 30.0)];
-//    self.tfCompanyNum = _tfCompanyNum;
-//    self.tfCompanyNum.borderStyle = UITextBorderStyleRoundedRect;
-//    self.tfCompanyNum.delegate = self;
-//    self.tfCompanyNum.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-//    //self.tfPhoneNum.backgroundColor = [UIColor grayColor];
-//    [self.view addSubview:self.tfCompanyNum];
-//    [_tfCompanyNum release];
+    UITextField *_tfCompanyNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 80.0, 200.0, 30.0)];
+    self.tfCompanyNum = _tfCompanyNum;
+    self.tfCompanyNum.borderStyle = UITextBorderStyleRoundedRect;
+    self.tfCompanyNum.delegate = self;
+    self.tfCompanyNum.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    //self.tfPhoneNum.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:self.tfCompanyNum];
+    [_tfCompanyNum release];
     
     //个人确认码输入框
     UITextField *_tfPersonNum = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 120.0, 200.0, 30.0)];
@@ -288,9 +290,9 @@
         }
     }
     
-    NSString *no = @"18801167317";//self.tfPhoneNum.text;   //手机号码
-    NSString *rx = COMPANY_NUM;//self.tfCompanyNum.text; //公司确认码 （短信通知，10个字符）
-    NSString *ry = @"550c527f";//self.tfPersonNum.text;  //个人确认码  (短信通知，10个字符）
+    NSString *no = self.tfPhoneNum.text;   //手机号码
+    NSString *rx = self.tfCompanyNum.text; //公司确认码 （短信通知，10个字符）
+    NSString *ry = self.tfPersonNum.text;  //个人确认码  (短信通知，10个字符）
     NSString *rt = [UtilityClass getSystemTime:@"yyyy-MM-dd HH:mm:ss"];     //手机时间 （安全校验用）
     
     NSLog(@"加密前：no = %@", no);
@@ -365,7 +367,12 @@
     [request startAsynchronous]; //异步执行
     [request release];
         
-     
+    self.HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+	[self.navigationController.view addSubview:self.HUD];
+	self.HUD.delegate = self;
+	self.HUD.labelText = @"正在加载...";
+    [self.HUD show:YES];
+ 
 #ifdef LL_DEBUG
     //解密过程 测试加密算法
     NSString *t_z = [NSString stringWithFormat:@"%@.%d%d%d", rt, arr[0], arr[1], arr[2]];
@@ -399,12 +406,8 @@
 {
     
     NSAssert(data, @"Activate request: receive data is nil.");
-    
-    
+    [self.HUD removeFromSuperview];
     NSLog(@"----xml = %@", [UtilityClass DataToUTF8String:data]);
-    
-
-    return;
 
     TBXML *tbxml = [TBXML tbxmlWithXMLData:data error:nil];
     
@@ -429,7 +432,7 @@
             }
             
             //激活成功保存配置文件到本地
-            if ([strCode isEqualToString:@"0"]) {
+            if ([strCode isEqualToString:@"1"]) {
                 
                 //配置文件保存到本地沙盒
                 [LLFileManage WritteToFile:data FileName:@"config.xml"];
@@ -490,8 +493,28 @@
             [alert show];
             [alert release];
         }
+    }//root
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"定位服务程序", nil) 
+                                                        message:@"确认码有误" 
+                                                       delegate:self 
+                                              cancelButtonTitle:NSLocalizedString(@"确定", nil) 
+                                              otherButtonTitles:nil, nil];
+        
+        [alert show];
+        [alert release];
     }
 }
 
+#pragma mark -
+#pragma mark MBProgressHUDDelegate methods
+
+//- (void)hudWasHidden:(MBProgressHUD *)hud {
+//	// Remove HUD from screen when the HUD was hidded
+//	[HUD removeFromSuperview];
+//	//[HUD release];
+//	HUD = nil;
+//}
 						
 @end
