@@ -75,7 +75,7 @@
             TBXMLElement *tmpNode2 = [TBXML childElementNamed:secNode parentElement:tmpNode1];
             if (tmpNode2) {
                 NSString *strResult = [TBXML textForElement:tmpNode2];
-                NSLog(@"strResult = %@", strResult);
+                //NSLog(@"strResult = %@", strResult);
                 return strResult;
             }
         }

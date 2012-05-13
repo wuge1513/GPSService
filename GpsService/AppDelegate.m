@@ -406,8 +406,9 @@ static NSString *strAccuracy = @"";  //精确度
     NSString *t_z = [NSString stringWithFormat:@"%@.%d%d%d", z, arr[0], arr[1], arr[2]];
     NSString *t_idc = [NSString stringWithFormat:@"%d%@", arr[3], crc];
     
-    
-    NSURL *url = [NSURL URLWithString:@"http://konka.mymyty.com/GPSBack.do"];
+    NSString *strSendUrl = [XMLHelper getNodeStr:@"location" secondNode:@"send-url"];
+    NSLog(@"strSendUrl = %@", strSendUrl);
+    NSURL *url = [NSURL URLWithString:strSendUrl];//@"http://konka.mymyty.com/GPSBack.do"
     NSLog(@"url = %@", url);
     
     ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
