@@ -261,7 +261,7 @@ static NSString *strAccuracy = @"";  //精确度
             NSString *_idc= [NSString stringWithFormat:@"%d%@", arr[3], crc];
             NSLog(@"_idc = %@", _idc);
             
-            NSURL *url = [NSURL URLWithString:@"http://konka.mymyty.com/GPSConfig.do"];//strConfigUrl
+            NSURL *url = [NSURL URLWithString:strConfigUrl];//@"http://konka.mymyty.com/GPSConfig.do"
             NSLog(@"url123 = %@", url);
             
             //检查配置文件是否升级

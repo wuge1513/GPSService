@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A92EDC2F1536FA3A0048E835 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = A92EDC2E1536FA3A0048E835 /* Default.png */; };
+		A93B058A15612413005AED01 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A93B058915612413005AED01 /* icon@2x.png */; };
 		A96B9007151C1E81009AF3EC /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A96B9006151C1E81009AF3EC /* icon.png */; };
 		A98C097814FB8EF60094D1EB /* PBEWithMD5AndDES.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C097714FB8EF60094D1EB /* PBEWithMD5AndDES.m */; };
 		A98C097B14FB927E0094D1EB /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C097A14FB927E0094D1EB /* UtilityClass.m */; };
@@ -52,6 +53,7 @@
 
 /* Begin PBXFileReference section */
 		A92EDC2E1536FA3A0048E835 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		A93B058915612413005AED01 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		A96B9006151C1E81009AF3EC /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		A98C097614FB8EF60094D1EB /* PBEWithMD5AndDES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBEWithMD5AndDES.h; sourceTree = "<group>"; };
 		A98C097714FB8EF60094D1EB /* PBEWithMD5AndDES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBEWithMD5AndDES.m; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				A96B9006151C1E81009AF3EC /* icon.png */,
+				A93B058915612413005AED01 /* icon@2x.png */,
 				A92EDC2E1536FA3A0048E835 /* Default.png */,
 				CEEA940E14F5826000E9E79D /* GpsService-Info.plist */,
 				CEEA940F14F5826000E9E79D /* InfoPlist.strings */,
@@ -353,6 +356,7 @@
 				A9EE737E151C501300630484 /* config.xml in Resources */,
 				A96B9007151C1E81009AF3EC /* icon.png in Resources */,
 				A92EDC2F1536FA3A0048E835 /* Default.png in Resources */,
+				A93B058A15612413005AED01 /* icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
