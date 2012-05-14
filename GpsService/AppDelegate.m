@@ -43,7 +43,7 @@ static NSString *strAccuracy = @"";  //精确度
     NSLog(@"000");
     
     //程序启动检查配置更新
-    //[self checkUpConfig:YES];
+    [self checkUpConfig:YES];
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
@@ -87,7 +87,6 @@ static NSString *strAccuracy = @"";  //精确度
     //启动检查配置更新
     [self checkUpConfig:YES];
     //判断是否提交位置信息, 提交位置信息
-    //[self checkUpConfig:NO];
     [self postGPSInfo];
 }
 
@@ -151,7 +150,7 @@ static NSString *strAccuracy = @"";  //精确度
         if (isConfig) {
             [self getConfigUpDate:data];
         }else{
-            [self getGPSCondition:data];
+            NSLog(@"config.xml is not exist.");
         }
         
     }
@@ -161,7 +160,7 @@ static NSString *strAccuracy = @"";  //精确度
         if (isConfig) {
             [self getConfigUpDate:data];
         }else{
-            [self getGPSCondition:data];
+            NSLog(@"config.xml is not exist.");
         }
     }
 }
@@ -262,7 +261,7 @@ static NSString *strAccuracy = @"";  //精确度
             NSString *_idc= [NSString stringWithFormat:@"%d%@", arr[3], crc];
             NSLog(@"_idc = %@", _idc);
             
-            NSURL *url = [NSURL URLWithString:strConfigUrl];
+            NSURL *url = [NSURL URLWithString:@"http://konka.mymyty.com/GPSConfig.do"];//strConfigUrl
             NSLog(@"url123 = %@", url);
             
             //检查配置文件是否升级
@@ -329,90 +328,6 @@ static NSString *strAccuracy = @"";  //精确度
 }
 
 #pragma mark- 定时提交位置信息
-
-//获得是否提交位置信息条件
-/*- (void)getGPSCondition:(NSData *)data
-{
-    NSLog(@"获取是否提交位置信息条件");
-    NSAssert(data, @"GPS Condition: local data is nil");
-    
-    TBXML *tbxml = [TBXML tbxmlWithXMLData:data error:nil];
-    
-    TBXMLElement * root = tbxml.rootXMLElement;
-
-    NSString *strSendYear = @"";
-    NSString *strSendMonth = @"";
-    NSString *strSendTime = @"";  //时间段
-    NSString *strTimeInterval = @""; //时间间隔
-    NSString *strSendUrl = @"";
-    
-	if (root) {
-        TBXMLElement *location = [TBXML childElementNamed:@"location" parentElement:root];
-        if (location) {
-            //年份
-            TBXMLElement *sendYear = [TBXML childElementNamed:@"send-Year" parentElement:location];
-            if (sendYear) {
-                strSendYear = [TBXML textForElement:sendYear];
-                NSLog(@"sendYear = %@", strSendYear);
-            }
-            //月份
-            TBXMLElement *sendMonth = [TBXML childElementNamed:@"send-month" parentElement:location];
-            if (sendMonth) {
-                strSendMonth = [TBXML textForElement:sendMonth];
-                NSLog(@"sendMonth = %@", strSendMonth);
-            }
-            //日期,当日是否提交
-            TBXMLElement *sendDate = [TBXML childElementNamed:@"send-date" parentElement:location];
-            if (sendDate) {
-                NSString *strSendDate = [TBXML textForElement:sendDate];
-                NSLog(@"sendDate = %@",strSendDate);
-                
-                //截取字符串保存数组
-                NSArray *tmpArr = [[[NSArray alloc] init] autorelease];
-                tmpArr  = [strSendDate componentsSeparatedByString:@","];
-                NSLog(@"tmpArr = %@", tmpArr);
-                self.gpsDateArr = [NSArray arrayWithArray:tmpArr];
-                NSLog(@"self.gpsDateArr = %@", self.gpsDateArr);
-                
-            }
-            //提交时间
-            TBXMLElement *sendTime = [TBXML childElementNamed:@"send-time" parentElement:location];
-            if (sendTime) {
-                strSendTime = [TBXML textForElement:sendTime];
-                NSLog(@"sendTime = %@",strSendTime);
-            }
-            //提交时间间隔
-            TBXMLElement *timeInterval = [TBXML childElementNamed:@"time-interval" parentElement:location];
-            if (timeInterval) {
-                strTimeInterval = [TBXML textForElement:timeInterval];
-                NSLog(@"timeInterval = %@", strTimeInterval);
-            }
-            
-            //manual
-            TBXMLElement *manual = [TBXML childElementNamed:@"manual" parentElement:location];
-            if (manual) {
-                NSString *strManual = [TBXML textForElement:manual];
-                NSLog(@"manual = %@", strManual);
-            }
-            //send url
-            TBXMLElement *sendUrl = [TBXML childElementNamed:@"send-url" parentElement:location];
-            if (sendUrl) {
-                NSString *strSendUrl = [TBXML textForElement:sendUrl];
-                NSLog(@"sendUrl = %@", strSendUrl);
-            }
-            
-            //判断是否提交
-            BOOL isPostGPSInfo = [self isPostGPSInfo:strSendYear month:strSendMonth blDate:self.gpsDateArr];
-            if (isPostGPSInfo) {
-                NSLog(@"正式提交GPS信息!");
-                
-                NSURL *url = [NSURL URLWithString:@"http://www.baidu.com"];
-                [[UIApplication sharedApplication] openURL:url];
-            }
-            
-        }//location end!
-    }//root end!
-}*/
 
 - (void)postGPSInfo
 {
@@ -491,8 +406,9 @@ static NSString *strAccuracy = @"";  //精确度
     NSString *t_z = [NSString stringWithFormat:@"%@.%d%d%d", z, arr[0], arr[1], arr[2]];
     NSString *t_idc = [NSString stringWithFormat:@"%d%@", arr[3], crc];
     
-    
-    NSURL *url = [NSURL URLWithString:@"http://konka.mymyty.com/GPSBack.do"];
+    NSString *strSendUrl = [XMLHelper getNodeStr:@"location" secondNode:@"send-url"];
+    NSLog(@"strSendUrl = %@", strSendUrl);
+    NSURL *url = [NSURL URLWithString:strSendUrl];//@"http://konka.mymyty.com/GPSBack.do"
     NSLog(@"url = %@", url);
     
     ASIFormDataRequest *request = [[ASIFormDataRequest alloc] initWithURL:url];
